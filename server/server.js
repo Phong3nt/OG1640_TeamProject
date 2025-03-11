@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const connectDB = require('./src/config/db');
 const userRoutes = require('./src/routes/userRoutes');
+const blogRoutes = require('./src/routes/blogRoutes');
 
 const app = express();
 connectDB();
@@ -17,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Cấu hình API routes
 app.use('/api/users', userRoutes); // React sẽ gọi API từ đây
+app.use('/api', blogRoutes); // Add blog routes
 
 // Chạy server
 const PORT = process.env.PORT || 5000;
