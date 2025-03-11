@@ -1,0 +1,134 @@
+/* ================== Navbar chung ================== */
+.navbar {
+  background: linear-gradient(45deg, #0a0f0d, #1a3b34, #0a0f0d);
+  background-size: 200% 200%;
+  animation: gradientBG 6s ease infinite;
+  padding: 20px 0;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+/* ================== Navbar Container ================== */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  padding: 0 40px; 
+  box-sizing: border-box; 
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: yellow;
+}
+
+.logo-img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid yellow;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.8);
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  position: relative;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 12px;
+  transition: all 0.3s;
+  border-radius: 6px;
+}
+
+.nav-links li a:hover {
+  background: yellow;
+  color: black;
+  transform: scale(1.1);
+}
+
+.login {
+  padding: 10px 20px;
+  border: 2px solid yellow;
+  border-radius: 25px;
+  background: black;
+  color: yellow;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+}
+
+.login:hover {
+  background: yellow;
+  color: black;
+  transform: scale(1.1);
+}
+
+@media (max-width: 967px) {
+  .navbar-container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+  }
+
+  .nav-links {
+      margin-top: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+      flex-direction: row;
+      justify-content: space-between;
+  }
+
+  .nav-links {
+      display: none;
+      flex-direction: column;
+      background: #0a0f0d;
+      width: 100%;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      text-align: center;
+      padding: 10px 0;
+  }
+
+  .nav-links.active {
+      display: flex;
+  }
+
+  .menu-icon {
+      display: block;
+      cursor: pointer;
+      font-size: 24px;
+      color: white;
+      padding: 10px;
+  }
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
