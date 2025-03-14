@@ -1,15 +1,12 @@
-import Footer from "./components/Footer"
-import Header from "./components/Header";
-import HomePage from "./pages/Web/HomePage/tutor";
+import { BrowserRouter } from "react-router-dom";
+import { Router } from "./routes";
 
 function App() {
   return (
-    <>
-    <Header />
-    <HomePage />
-    <Footer />
-    </>
-  )
+    <BrowserRouter>
+      <Router />
+    </BrowserRouter>
+  );
 }
 
 export default App;
