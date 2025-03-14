@@ -1,9 +1,20 @@
-// [Feature] Create Dashboard Controller - v1
-// Task: Handle dashboard data aggregation and statistics.
-// Assigned to: Name12
+// controllers/dashboardController.js
+const dashboardService = require('../services/dashboardService');
 
-// TODO: Implement user activity overview
-// TODO: Implement message and conversation statistics
-// TODO: Implement post and comment insights
-// TODO: Implement system usage analytics
-// TODO: Implement real-time data updates for dashboard
+// Lấy thông tin tổng quan cho Dashboard
+exports.getDashboardData = async (req, res) => {
+  try {
+    const dashboardData = await dashboardService.getDashboardData();
+
+    res.status(200).json({
+      success: true,
+      data: dashboardData
+    });
+  } catch (error) {
+    console.error('Error getting dashboard data:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error'
+    });
+  }
+};
