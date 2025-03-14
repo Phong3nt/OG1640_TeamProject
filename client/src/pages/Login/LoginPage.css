@@ -1,0 +1,124 @@
+/* 🌞🌙 Dark Mode */
+:root {
+    --bg-light: #ffffff;
+    --text-light: #333;
+    --box-bg-light: #f8f9fa;
+    --button-bg-light: #3498db;
+    --button-hover-light: #2980b9;
+    --input-border-light: #ccc;
+
+    --bg-dark: #1e1e1e;
+    --text-dark: #f4f4f4;
+    --box-bg-dark: #2c2c2c;
+    --button-bg-dark: #3498db;
+    --button-hover-dark: #2980b9;
+    --input-border-dark: #555;
+}
+
+body {
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.dark-mode {
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+/* Layout chính */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Form đăng nhập */
+.login-box {
+    width: 350px;
+    padding: 40px;
+    background: var(--box-bg-light);
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: background 0.3s ease;
+}
+
+.dark-mode .login-box {
+    background: var(--box-bg-dark);
+}
+
+/* Input */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--input-border-light);
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.dark-mode input {
+    border-color: var(--input-border-dark);
+}
+
+/* Hiển thị lỗi */
+.input-error {
+    border-color: red !important;
+}
+
+.error-message {
+    color: red;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background: var(--button-bg-light);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: var(--button-hover-light);
+}
+
+.dark-mode button {
+    background: var(--button-bg-dark);
+}
+
+.dark-mode button:hover {
+    background: var(--button-hover-dark);
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 24px;
+}
