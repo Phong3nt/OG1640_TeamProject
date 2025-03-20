@@ -1,0 +1,245 @@
+/* Đảm bảo ProfilePage có khoảng cách đủ lớn để không bị che */
+.profile-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px; /* Đẩy xuống tránh bị che */
+    padding-bottom: 50px; /* Tránh bị footer che mất */
+}
+
+/* Thẻ chứa toàn bộ thông tin user */
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 10; /* Đảm bảo không bị che bởi header */
+}
+
+/* Avatar */
+.avatar-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.avatar {
+    width: 100px; /* Kích thước avatar nhỏ hơn */
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ccc;
+    background: white;
+}
+
+/* Icon chỉnh sửa avatar */
+.edit-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: white;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Form input */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* Nhóm nút */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Style chung cho tất cả các nút */
+.button {
+    padding: 8px 14px; /* Tăng kích thước nhẹ */
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #007bff;
+    min-width: 150px; /* Đảm bảo hai nút cùng kích thước */
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+
+/* Nút mặc định có viền xanh, không nền */
+.button-outline {
+    background-color: transparent;
+    color: #007bff;
+}
+
+/* Nút có nền xanh */
+.button-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Hover chung cho cả hai nút */
+.button:hover {
+    background-color: #0056b3;
+    color: white;
+    border-color: #0056b3;
+}
+/* Avatar container */
+.avatar-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+/* Bọc cả avatar và icon để click vào đâu cũng chọn ảnh */
+.avatar-label {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Avatar */
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ccc;
+    background: white;
+}
+
+/* Icon chỉnh sửa (✏️) */
+.edit-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: white;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+/* Form đổi mật khẩu */
+.change-password-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Avatar container */
+.avatar-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+/* Avatar */
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ccc;
+    background: white;
+}
+
+/* Icon chỉnh sửa avatar */
+.edit-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: white;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Form input */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+}
+
+.form-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* Button nhóm */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Style chung cho tất cả các nút */
+.button {
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #007bff;
+    min-width: 150px;
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+
+/* Nút mặc định có viền xanh, không nền */
+.button-outline {
+    background-color: transparent;
+    color: #007bff;
+}
+
+/* Nút có nền xanh */
+.button-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Hover chung cho cả hai nút */
+.button:hover {
+    background-color: #0056b3;
+    color: white;
+    border-color: #0056b3;
+}
