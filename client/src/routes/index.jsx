@@ -11,12 +11,9 @@ export const Router = () => {
       <Route element={<Layout />}>
         <Route path="/" index element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-<<<<<<< HEAD
         <Route path="/blog" element={<BlogPage />} />
-=======
         <Route path="/profile" element={<ProfilePage />} /> 
 
->>>>>>> main
       </Route>
     </Routes>
   );
