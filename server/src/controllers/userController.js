@@ -1,12 +1,3 @@
-// [Feature] Create User Controller - v1
-// Task: Handle user-related operations such as registration, login, profile updates.
-// Assigned to: Name1
-
-// TODO: Implement user registration
-// TODO: Implement user login
-// TODO: Implement update user profile
-// TODO: Implement get user details
-// TODO: Implement delete user (soft delete)
 
 // userController.js
 const User = require('../models/User');
@@ -33,19 +24,45 @@ exports.registerUser = async (req, res) => {
 
 // Login user and return JWT
 exports.loginUser = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user || !(await user.comparePassword(password))) return res.status(401).json({ message: 'Invalid email or password' });
+    const { email, password } = req.body;
 
-    if (!user.isConfirmed) return res.status(403).json({ message: 'Please confirm your email first' });
+    try {
+        const user = await User.findOne({ email });
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ token });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
+        // Kiểm tra email & mật khẩu
+        if (!user || !(await user.comparePassword(password))) {
+            return res.status(401).json({ message: "Invalid email or password" });
+        }
+
+        // Kiểm tra email đã xác nhận chưa
+        if (!user.isConfirmed) {
+            return res.status(403).json({ message: "Please confirm your email first" });
+        }
+
+        // Tạo token
+        const token = jwt.sign(
+            { id: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" }
+        );
+
+        // Trả về token + thông tin user
+        res.status(200).json({
+            token,
+            user: {
+                id: user._id,
+                name: user.fullName,
+                email: user.email,
+                role: user.role
+            },
+            message: "Login successful"
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: "Server error" });
+    }
 };
+
 
 // Logout user
 exports.logoutUser = (req, res) => {

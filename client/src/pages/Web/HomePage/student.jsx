@@ -1,20 +1,23 @@
 // import {
-//     StudentList,
+//     TutorList,
 //     BlogList,
 //     FileList,
 //     ScheduleList
 // } from "./section";
 
 import { PostList } from "./sections/PostList";
-
 import "./homepage.css";
 
-export const HomePage = () => {
+export const StudentHomePage = () => {
+  const user = JSON.parse(localStorage.getItem("user")); // Lấy thông tin user
+
   return (
     <main className="homepage">
+      <h2>Welcome, {user.name} ({user.role})</h2>
+
       <section>
         <h2>List Tutors</h2>
-        {/* <StudentList /> */}
+        {/* <TutorList /> */}
       </section>
 
       <section>
@@ -35,4 +38,4 @@ export const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default StudentHomePage;

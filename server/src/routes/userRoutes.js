@@ -21,7 +21,7 @@ router.post('/adminLogin', (req, res) => {
 router.post('/register', registerUser);
 
 // Route for user login
-router.post('/userLogin', loginUser);
+router.post('/login', loginUser);
 
 // Route for user logout
 router.post('/logout',auth, logoutUser);
@@ -33,7 +33,7 @@ router.post('/forgot-password', forgotPassword);
 router.post('/reset-password/:token', resetPassword);
 
 // Route for create user
-router.post('/create',auth, createUser);
+router.post('/create', createUser);
 
 // Route for get all user
 router.get('/all', getUsers );
@@ -45,6 +45,6 @@ router.get('/:id', getUserById);
 router.put('/:id', updateUser);
 
 // Route for delete user
-router.delete('/:id',auth, deleteUser);
+router.delete('/:id', deleteUser);
 
 module.exports = router;
