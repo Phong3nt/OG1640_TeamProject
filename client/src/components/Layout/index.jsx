@@ -5,12 +5,14 @@ import Footer from "../Footer";
 
 const Layout = () => {
     const location = useLocation();
-    const hideHeaderFooter = location.pathname === "/login"; 
+    const hideHeaderFooter = location.pathname === "/login";
 
     return (
         <>
             {!hideHeaderFooter && <Header />}
-            <Outlet /> 
+            <main style={{ paddingTop: "100px", paddingBottom: "80px", minHeight: "100vh" }}>
+                <Outlet />
+            </main>
             {!hideHeaderFooter && <Footer />}
         </>
     );
