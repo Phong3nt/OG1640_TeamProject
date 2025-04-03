@@ -6,12 +6,15 @@
 // } from "./section";
 
 import { PostList } from "./sections/PostList";
-
 import "./homepage.css";
 
-export const HomePage = () => {
+export const TutorHomePage = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <main className="homepage">
+      <h2>Welcome, {user.name} ({user.role})</h2>
+
       <section>
         <h2>List Students</h2>
         {/* <StudentList /> */}
@@ -35,4 +38,4 @@ export const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default TutorHomePage;
