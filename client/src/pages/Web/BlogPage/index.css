@@ -1,0 +1,112 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative
+}
+
+.content {
+    max-width: 96rem;
+    margin: 0 auto;
+    height: 10rem;
+    color: black;
+    text-align: center;
+}
+
+.title {
+    font-size: 2.25rem;
+    font-weight: bold;
+}
+
+.description {
+    font-size: 1.25rem;
+    margin-top: 1.25rem;
+}
+
+.blog-list {
+    max-width: 96rem;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8rem;
+}
+
+.blog-list>* {
+    flex: 1 1 20rem;
+}
+
+@media (max-width: 740px) {
+    .blog-list {
+        justify-content: space-around;
+    }
+
+    .content {
+        margin: 100px 0;
+        height: fit-content;
+    }
+}
+
+@media (min-width: 741px) and (max-width:1023px) {
+    .content {
+        margin: 100px 0 0;
+        height: 10rem;
+    }
+
+    .grid-container {
+        flex-direction: column;
+        align-content: space-around;
+    }
+}
+
+.grid-container {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background: var(--button-bg-light);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: var(--button-hover-light);
+}
+
+.dark-mode button {
+    background: var(--button-bg-dark);
+}
+
+.dark-mode button:hover {
+    background: var(--button-hover-dark);
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    position: absolute;
+    top: 100px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.dark-mode .content{
+    color: white
+}

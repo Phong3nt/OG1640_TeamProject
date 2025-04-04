@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import "../MeetingPage.css";
 
-const MeetingDetailModal = ({ meeting, onClose, onUpdate, onViewLogs, currentUser }) => {
+const MeetingDetailModal = ({ meeting, currentUser, onClose, onUpdate, onDelete, onViewLogs }) => {
     const [zoomId, setZoomId] = useState(meeting.zoomId || "");
     const [recordingURL, setRecordingURL] = useState(meeting.recordingURL || "");
 
-    const isTutor = currentUser.role === "tutor";
+    const isTutor = currentUser.userId === meeting.senderId;
 
     const handleSave = () => {
         const updated = {
@@ -16,6 +16,12 @@ const MeetingDetailModal = ({ meeting, onClose, onUpdate, onViewLogs, currentUse
         };
         onUpdate(updated);
         onClose();
+    };
+
+    const handleDelete = () => {
+        if (window.confirm("Are you sure you want to delete this meeting?")) {
+            onDelete(meeting.meetingId);
+        }
     };
 
     return (
@@ -38,6 +44,7 @@ const MeetingDetailModal = ({ meeting, onClose, onUpdate, onViewLogs, currentUse
                                 onChange={(e) => setZoomId(e.target.value)}
                             />
                         </div>
+
                         <div className="form-group">
                             <label>Recording Link</label>
                             <input
@@ -50,23 +57,22 @@ const MeetingDetailModal = ({ meeting, onClose, onUpdate, onViewLogs, currentUse
                         <div className="button-group">
                             <button className="button button-primary" onClick={handleSave}>Save</button>
                             <button className="button button-outline" onClick={() => onViewLogs(meeting.meetingId)}>View Logs</button>
+                            <button className="button button-outline" onClick={handleDelete}>Delete</button>
+                        </div>
+
+                        <div className="button-group" style={{ marginTop: 10 }}>
                             <button className="button button-outline" onClick={onClose}>Cancel</button>
                         </div>
                     </>
                 ) : (
                     <>
-                        <p><strong>Zoom ID:</strong> {zoomId || "Not set"}</p>
-                        <p>
-                            <strong>Recording:</strong>{" "}
-                            {recordingURL ? (
-                                <a href={recordingURL} target="_blank" rel="noreferrer" style={{ color: "#007bff" }}>
-                                    {recordingURL}
-                                </a>
-                            ) : (
-                                "Not available"
-                            )}
+                        <p><strong>Zoom ID:</strong> {zoomId || "Not available"}</p>
+                        <p><strong>Recording:</strong>{" "}
+                            {recordingURL
+                                ? <a href={recordingURL} target="_blank" rel="noreferrer">{recordingURL}</a>
+                                : "Not available"}
                         </p>
-                        <div className="button-group single-button">
+                        <div className="button-group">
                             <button className="button button-outline" onClick={onClose}>Close</button>
                         </div>
                     </>
