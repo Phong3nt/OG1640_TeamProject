@@ -1,12 +1,14 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import LoginPage from "../pages/Login/LoginPage";
+import MeetingPage from "../pages/Web/MeetingPage";
 import StudentHomePage from "../pages/Web/HomePage/student";
 import TutorHomePage from "../pages/Web/HomePage/tutor";
 import StaffDashboard from "../pages/Web/HomePage/staff";
 import BlogPage from "../pages/Web/BlogPage";
 import ProfilePage from "../pages/Web/ProfilePage/index";
 
+// ProtectedRoute component to guard access to protected routes
 const ProtectedRoute = ({ children }) => {
   const user = JSON.parse(localStorage.getItem("user"));
   return user ? children : <Navigate to="/login" replace />;
@@ -17,13 +19,20 @@ export const Router = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      {/* Unprotected routes */}
       <Route path="/login" element={<LoginPage />} />
 
+      {/* Default redirect if no route matches */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+
+      {/* Protected routes wrapped with Layout */}
       <Route element={<Layout />}>
+        {/* Routes that require authentication */}
+        <Route path="/meeting" element={<MeetingPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/profile" element={<ProfilePage />} />
 
+        {/* Dashboard route that redirects based on the user's role */}
         <Route
           path="/dashboard"
           element={
@@ -35,6 +44,7 @@ export const Router = () => {
           }
         />
 
+        {/* Role-based protected routes */}
         <Route
           path="/dashboard/student"
           element={
@@ -75,6 +85,7 @@ export const Router = () => {
         />
       </Route>
 
+      {/* Fallback for all other undefined routes */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
