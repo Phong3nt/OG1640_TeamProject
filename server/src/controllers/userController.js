@@ -1,72 +1,85 @@
-
-// userController.js
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const { sendConfirmationEmail, sendResetPasswordEmail } = require('../services/emailService');
-const UserService = require('../services/userService');
+const User = require("../models/User");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const UserService = require("../services/userService");
+const { sendConfirmationEmail, sendResetPasswordEmail } = require("../services/emailService");
+const { hashPassword, comparePassword } = require("../helpers/authHelper");
 
 // Register a new user
 exports.registerUser = async (req, res) => {
   const { fullName, email, phone, password, role } = req.body;
   try {
     const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ message: 'User already exists' });
+    if (userExists)
+      return res.status(400).json({ message: "User already exists" });
 
-    const user = await User.create({ fullName, email, phone, password, role });
+    // Hash the password before saving
+    const hashedPassword = await hashPassword(password);
+
+    // Create new user
+    const user = await User.create({ fullName, email, phone, password: hashedPassword, role });
     sendConfirmationEmail(user.email, user.confirmationToken);
 
-    res.status(201).json({ message: 'Registration successful. Please check your email to confirm your account.' });
+    res.status(201).json({
+      message:
+        "Registration successful. Please check your email to confirm your account.",
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error(error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
 // Login user and return JWT
 exports.loginUser = async (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    try {
-        const user = await User.findOne({ email });
+  try {
+    // Find user by email
+    const user = await User.findOne({ email });
 
-        // Kiểm tra email & mật khẩu
-        if (!user || !(await user.comparePassword(password))) {
-            return res.status(401).json({ message: "Invalid email or password" });
-        }
-
-        // Kiểm tra email đã xác nhận chưa
-        if (!user.isConfirmed) {
-            return res.status(403).json({ message: "Please confirm your email first" });
-        }
-
-        // Tạo token
-        const token = jwt.sign(
-            { id: user._id, role: user.role },
-            process.env.JWT_SECRET,
-            { expiresIn: "1h" }
-        );
-
-        // Trả về token + thông tin user
-        res.status(200).json({
-            token,
-            user: {
-                id: user._id,
-                name: user.fullName,
-                email: user.email,
-                role: user.role
-            },
-            message: "Login successful"
-        });
-
-    } catch (error) {
-        res.status(500).json({ message: "Server error" });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
     }
-};
 
+    // Compare password
+    const isPasswordValid = await comparePassword(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Check if the email is confirmed
+    if (!user.isConfirmed) {
+      return res.status(403).json({ message: "Please confirm your email first" });
+    }
+
+    // Create JWT token
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    // Return token and user information
+    res.status(200).json({
+      token,
+      user: {
+        id: user._id,
+        name: user.fullName,
+        email: user.email,
+        role: user.role,
+      },
+      message: "Login successful",
+    });
+  } catch (error) {
+    console.error(error); // Log the error details for debugging
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
 // Logout user
 exports.logoutUser = (req, res) => {
-  res.status(200).json({ message: 'Logged out successfully' });
+  res.status(200).json({ message: "Logged out successfully" });
 };
 
 // Forgot password
@@ -74,14 +87,18 @@ exports.forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
+    // Generate reset token
+    const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
     sendResetPasswordEmail(user.email, resetToken);
 
-    res.status(200).json({ message: 'Password reset email sent' });
+    res.status(200).json({ message: "Password reset email sent" });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error(error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -92,13 +109,17 @@ exports.resetPassword = async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
-    if (!user) return res.status(404).json({ message: 'Invalid token' });
+    if (!user) return res.status(404).json({ message: "Invalid token" });
 
-    user.password = password;
+    // Hash the new password
+    const hashedPassword = await hashPassword(password);
+    user.password = hashedPassword;
     await user.save();
-    res.status(200).json({ message: 'Password reset successful' });
+
+    res.status(200).json({ message: "Password reset successful" });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error(error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -108,6 +129,7 @@ exports.createUser = async (req, res) => {
     const user = await UserService.createUser(req.body);
     res.status(201).json(user);
   } catch (error) {
+    console.error(error);
     res.status(400).json({ message: error.message });
   }
 };
@@ -118,7 +140,8 @@ exports.getUsers = async (req, res) => {
     const users = await UserService.getUsers();
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -126,10 +149,11 @@ exports.getUsers = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const user = await UserService.getUserById(req.params.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -137,9 +161,10 @@ exports.getUserById = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const user = await UserService.updateUser(req.params.id, req.body);
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json(user);
   } catch (error) {
+    console.error(error);
     res.status(400).json({ message: error.message });
   }
 };
@@ -148,9 +173,12 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res) => {
   try {
     const user = await UserService.deleteUser(req.params.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.status(200).json({ message: 'User deleted successfully' });
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: 'Server error' });
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
+
+
