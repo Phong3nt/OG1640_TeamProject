@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import BlogCard from "../../../components/BlogCard";
+import BlogCard from "../../../components/PostCard";
 import "./index.css"
 import { FaSun, FaMoon, } from "react-icons/fa";
 
