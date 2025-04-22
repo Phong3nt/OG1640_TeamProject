@@ -1,11 +1,15 @@
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Router } from "./routes";
+import { AuthProvider } from "./contexts/AuthContext";  // Đảm bảo đã import AuthProvider
+import { Router } from "./routes"; // Đảm bảo Router là nơi chứa các route của bạn
 
 function App() {
   return (
     <BrowserRouter>
-      <Router />
-    </BrowserRouter>
+          <AuthProvider>
+            <Router />
+          </AuthProvider>
+        </BrowserRouter>
   );
 }
 
