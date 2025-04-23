@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./LoginPage.css";
 import { FaSun, FaMoon, FaExclamationCircle } from "react-icons/fa"; // Icon Dark Mode & Lỗi
+import { useAuth } from "../../contexts/AuthContext"; // Import AuthContext
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ const LoginPage = () => {
   const [error, setError] = useState({ email: "", password: "", server: "" });
   const [isDarkMode, setIsDarkMode] = useState(false);
   const navigate = useNavigate(); // Điều hướng
+  const {login}=useAuth(); // Lấy hàm login từ AuthContext
 
   useEffect(() => {
     document.body.className = isDarkMode ? "dark-mode" : "";
@@ -34,11 +36,11 @@ const LoginPage = () => {
       );
       const { token, user } = response.data;
 
-      localStorage.setItem("token", token); // Lưu token
-      localStorage.setItem("user", JSON.stringify(user)); // Lưu thông tin user
+      login(user); // Lưu thông tin người dùng vào AuthContext
+      localStorage.setItem("token", token); // Lưu token vào localStorage
 
-      console.log("User Role:", user);
-      navigate("/dashboard"); // Điều hướng thay vì window.location.href
+      console.log("User Role:", user.role);
+      navigate(`/dashboard/${user.role}`); // Điều hướng thay vì window.location.href
     } catch (error) {
       console.error("Login error:", error.response?.data);
       setError({

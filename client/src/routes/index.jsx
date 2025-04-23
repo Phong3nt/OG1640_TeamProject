@@ -7,15 +7,18 @@ import TutorHomePage from "../pages/Web/HomePage/tutor";
 import StaffDashboard from "../pages/Web/HomePage/staff";
 import BlogPage from "../pages/Web/BlogPage";
 import ProfilePage from "../pages/Web/ProfilePage/index";
+import React from "react";
+import { useAuth } from "../contexts/AuthContext";
+import Messenger from "../pages/Messenger/Messenger";
 
 // ProtectedRoute component to guard access to protected routes
 const ProtectedRoute = ({ children }) => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = useAuth();
   return user ? children : <Navigate to="/login" replace />;
 };
 
 export const Router = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const {user} = useAuth();
 
   return (
     <Routes>
@@ -31,12 +34,13 @@ export const Router = () => {
         <Route path="/meeting" element={<MeetingPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/message" element={<Messenger />} />
 
         {/* Dashboard route that redirects based on the user's role */}
         <Route
           path="/dashboard"
           element={
-            user?.role ? (
+            user? (
               <Navigate to={`/dashboard/${user.role}`} replace />
             ) : (
               <Navigate to="/login" replace />

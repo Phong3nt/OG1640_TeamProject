@@ -1,20 +1,33 @@
-const express = require('express');
+const express = require("express");
+const multer = require("multer");
+const { requireSignIn } = require("../middlewares/auth");
+const {
+  updateProfileController,
+  registerController,
+  loginController,
+  forgotPasswordController,
+} = require("../controllers/authController");
+
 const router = express.Router();
-const profileController = require('../controllers/profileController');
-const auth = require('../middlewares/auth');
-const multer = require('multer');
 
-// Cấu hình multer để upload ảnh đại diện
+// Cấu hình multer để lưu ảnh đại diện
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/avatars/'),
-  filename: (req, file, cb) => cb(null, `${Date.now()}-${file.originalname}`)
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
 });
+
 const upload = multer({ storage });
+router.post("/register", registerController);
+router.post("/login", loginController);
+router.post("/forgot-password", forgotPasswordController);
+router.get("/profile/:id", profileController.getProfile);
 
-// Route lấy thông tin hồ sơ cá nhân
-router.get('/', auth, profileController.getProfile);
+router.put("/profile/update", requireSignIn, updateProfileController);
 
-// Route cập nhật thông tin hồ sơ cá nhân
-router.put('/', auth, upload.single('avatar'), profileController.updateProfile);
+//router.put("/me", requireSignIn, upload.single("avatar"), updateProfile);
 
 module.exports = router;
