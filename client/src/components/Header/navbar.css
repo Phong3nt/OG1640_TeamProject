@@ -16,8 +16,8 @@
   align-items: center;
   width: 100%;
   max-width: 100%;
-  padding: 0 40px; 
-  box-sizing: border-box; 
+  padding: 0 40px;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -81,52 +81,88 @@
 
 @media (max-width: 967px) {
   .navbar-container {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .nav-links {
-      margin-top: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 16px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
   }
 }
 
 @media (max-width: 768px) {
   .navbar-container {
-      flex-direction: row;
-      justify-content: space-between;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .nav-links {
-      display: none;
-      flex-direction: column;
-      background: #0a0f0d;
-      width: 100%;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      text-align: center;
-      padding: 10px 0;
+    display: none;
+    flex-direction: column;
+    background: #0a0f0d;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    text-align: center;
+    padding: 10px 0;
   }
 
   .nav-links.active {
-      display: flex;
+    display: flex;
   }
 
   .menu-icon {
-      display: block;
-      cursor: pointer;
-      font-size: 24px;
-      color: white;
-      padding: 10px;
+    display: block;
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    padding: 10px;
   }
 }
 
 @keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.username {
+  color: white
+}
+
+.dark-mode-toggle {
+  position: absolute;
+  top: 51px;
+  right: 295px;
+  cursor: pointer;
+  font-size: 24px;
+  color: white
+}
+button:hover {
+  background: var(--button-hover-light);
+}
+
+.dark-mode button {
+  background: var(--button-bg-dark);
+}
+
+.dark-mode button:hover {
+  background: var(--button-hover-dark);
+}
+
+.dark-mode .content{
+  color: white
 }

@@ -1,0 +1,183 @@
+/* File: AllocationPage.css hoặc file CSS tương ứng */
+
+/* --- Container chung (Tùy chọn) --- */
+.allocation-page-container {
+    padding: 20px;
+    max-width: 1200px; /* Giới hạn chiều rộng tối đa */
+    margin: 0 auto;   /* Căn giữa trang */
+    font-family: Arial, sans-serif; /* Font chữ cơ bản */
+  }
+  
+  .allocation-page-container h1,
+  .allocation-page-container h2 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* --- Khu vực điều khiển phân bổ --- */
+  .allocation-controls {
+    display: flex;
+    gap: 20px; /* Khoảng cách giữa các nhóm selector */
+    margin-bottom: 30px;
+    align-items: flex-end; /* Căn chỉnh các phần tử theo đáy */
+    flex-wrap: wrap; /* Cho phép xuống dòng nếu không đủ chỗ */
+  }
+  
+  .selector-group {
+    display: flex;
+    flex-direction: column; /* Xếp label trên select */
+  }
+  
+  .selector-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9em;
+  }
+  
+  .selector-group select {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 200px; /* Độ rộng tối thiểu */
+  }
+  
+  .allocate-button {
+    padding: 9px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+  }
+  
+  .allocate-button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+  
+  .allocate-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .allocation-message {
+      margin-left: 15px; /* Khoảng cách với nút */
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-size: 0.9em;
+  }
+  .allocation-message.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+  }
+  .allocation-message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+  }
+  
+  
+  /* --- Khu vực bảng --- */
+  .allocation-table-section {
+    margin-top: 30px;
+  }
+  
+  /* --- Bảng Allocation --- */
+  .allocation-table {
+    width: 100%;
+    border-collapse: collapse; /* Gộp đường viền */
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    border: 1px solid #e0e0e0;
+    border-radius: 5px; /* Bo góc nhẹ cho bảng */
+    overflow: hidden; /* Đảm bảo bo góc áp dụng cho cả nội dung */
+  }
+  
+  /* --- Header của bảng (th) --- */
+  .allocation-table th {
+    background-color: #f8f9fa; /* Màu nền xám nhạt */
+    color: #495057; /* Màu chữ tối hơn */
+    padding: 12px 15px; /* Padding bên trong ô */
+    text-align: left; /* Căn lề trái */
+    font-weight: 600; /* Đậm hơn một chút */
+    border-bottom: 2px solid #dee2e6; /* Đường kẻ đậm hơn ở dưới header */
+  }
+  
+  /* --- Các ô dữ liệu (td) --- */
+  .allocation-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e9ecef; /* Đường kẻ mờ giữa các hàng */
+    color: #333;
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+  }
+  
+  /* --- Định dạng cho hàng không có dữ liệu --- */
+  .allocation-table td[colSpan="6"] {
+    text-align: center;
+    font-style: italic;
+    color: #6c757d;
+    padding: 20px;
+  }
+  
+  /* --- Định dạng cho các hàng chẵn (hiệu ứng ngựa vằn) --- */
+  .allocation-table tbody tr:nth-child(even) {
+    background-color: #fbfcfe; /* Màu nền khác biệt nhẹ */
+  }
+  
+  /* --- Hiệu ứng khi di chuột qua hàng --- */
+  .allocation-table tbody tr:hover {
+    background-color: #f1f5f9; /* Màu nền thay đổi khi hover */
+  }
+  
+  /* --- Huy hiệu trạng thái (Status Badge) --- */
+  .status-badge {
+    display: inline-block; /* Để padding có tác dụng đúng */
+    padding: 5px 10px;
+    font-size: 0.8em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem; /* Bo góc nhẹ */
+    color: #fff; /* Màu chữ trắng */
+  }
+  
+  .status-active {
+    background-color: #28a745; /* Màu xanh lá cho active */
+  }
+  
+  .status-inactive {
+    background-color: #6c757d; /* Màu xám cho inactive */
+  }
+  
+  /* --- Nút hủy kích hoạt --- */
+  .deactivate-button {
+    padding: 4px 8px;
+    font-size: 0.85em;
+    color: #dc3545; /* Màu chữ đỏ */
+    background-color: transparent;
+    border: 1px solid #dc3545;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .deactivate-button:hover {
+    background-color: #dc3545; /* Nền đỏ khi hover */
+    color: #fff; /* Chữ trắng khi hover */
+  }
+  
+  .deactivate-button:disabled {
+    border-color: #ccc;
+    color: #ccc;
+    cursor: not-allowed;
+    background-color: transparent;
+  }
+  .status-overdue{
+    background-color: red;
+  }

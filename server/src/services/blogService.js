@@ -6,12 +6,14 @@ const createBlog = async (data) => {
   return blog;
 };
 
+// Lấy tất cả blog
 const getBlogs = async () => {
-  return await Blog.find().populate('author');
+  return await Blog.find().populate('author', 'fullName');
 };
 
+// Lấy blog theo ID
 const getBlogById = async (id) => {
-  return await Blog.findById(id).populate('author');
+  return await Blog.findById(id).populate('author', 'fullName');
 };
 
 const updateBlog = async (id, data) => {
@@ -29,6 +31,7 @@ module.exports = {
   updateBlog,
   deleteBlog,
 };
+
 
 
 // const Blog = require('../models/Blog');

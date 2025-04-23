@@ -4,41 +4,46 @@ const User = require('../models/User');
 const createBlog = async (req, res) => {
   try {
     // Find the user by name (or any other unique identifier)
-    const user = await User.findOne({ fullName: req.body.author });
+    const user = await User.findOne({ fullName: req.body.author }); // Problem 1: Assuming author name is sent, not ID
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
     // Create the blog with the user's ObjectId as the author
     const blogData = {
-      ...req.body,
-      author: user._id,
+      ...req.body, // Includes title, description (if sent), coverImage, etc.
+      author: user._id, // Overwrites req.body.author with the user's ID
     };
-    const blog = await blogService.createBlog(blogData);
+    console.log('Creating Blog - Request Body:', req.body); // User needs to add this line
+    console.log('Data passed to service:', blogData); // Maybe add this too
+    const blog = await blogService.createBlog(blogData); // Passes combined data
     res.status(201).json(blog);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
+// Lấy tất cả blog
 const getBlogs = async (req, res) => {
   try {
-    const blogs = await blogService.getBlogs();
+    const blogs = await blogService.getBlogs(); // Sử dụng blogService
     res.status(200).json(blogs);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
+// Lấy blog theo ID
 const getBlogById = async (req, res) => {
   try {
-    const blog = await blogService.getBlogById(req.params.id);
-    if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
-    }
+    const blog = await blogService.getBlogById(req.params.id); // Sử dụng blogService
+
+    if (!blog) return res.status(404).json({ message: "Blog not found" });
+
     res.status(200).json(blog);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 

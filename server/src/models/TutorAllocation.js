@@ -1,15 +1,50 @@
 const mongoose = require('mongoose');
 
-const tutorAllocationSchema = new mongoose.Schema({
-  staff: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  tutor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  student: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  status: { type: String, enum: ['active', 'inactive'], default: 'active' },
-  startDate: { type: Date, default: Date.now },
-  endDate: { type: Date },
-  isCurrent: { type: Boolean, default: true }
-}, { timestamps: true });
+const allocationSchema = new mongoose.Schema({
+  student: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Tham chiếu đến User model
+    required: [true, 'Student ID is required.'], // Báo lỗi nếu thiếu
+    index: true
+  },
+  tutor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Tham chiếu đến User model
+    required: [true, 'Tutor ID is required.'],
+    index: true
+  },
+  allocatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Tham chiếu đến User model (là staff)
+    required: [true, 'Allocator ID (staff) is required.'],
+    index: true
+  },
+  allocationDate: {
+    type: Date,
+    default: Date.now
+  },
+  durationMonths: {
+    type: Number,
+    required: [true, 'Course duration (in months) is required.'], 
+    min: [1, 'Duration must be at least 1 month.'], 
+    // enum: {
+    //     values: [1, 2, 3], // Chỉ cho phép 1, 2, 3 tháng
+    //     message: 'Duration must be 1, 2, or 3 months.'
+    // }
+  },
+  status: {
+    type: String,
+    enum: {
+        values: ['active', 'inactive'],
+        message: 'Status must be either active or inactive.'
+    },
+    default: 'active',
+    required: true,
+    index: true
+  },
 
-tutorAllocationSchema.index({ student: 1, isCurrent: 1 });
-tutorAllocationSchema.index({ tutor: 1, isCurrent: 1 });
-module.exports = mongoose.model('TutorAllocation', tutorAllocationSchema);
+}, { timestamps: true }); 
+
+
+
+module.exports = mongoose.model('Allocation', allocationSchema);

@@ -5,7 +5,7 @@ body {
 
 .container {
     width: 100%;
-    min-height: 100vh;
+    min-height: 70vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -67,12 +67,12 @@ body {
     }
 }
 
-.grid-container {
+.flex-container {
     display: flex;
-    width: 100%;
     flex-wrap: wrap;
-    justify-content: space-evenly;
-}
+    justify-content: space-evenly; /* Hoặc space-around, flex-start, center tùy theo thiết kế */
+    gap: 20px; /* Khoảng cách giữa các blog card */
+  }
 
 button {
     width: 100%;
@@ -86,27 +86,24 @@ button {
     transition: background 0.3s ease;
 }
 
-button:hover {
-    background: var(--button-hover-light);
-}
-
-.dark-mode button {
-    background: var(--button-bg-dark);
-}
-
-.dark-mode button:hover {
-    background: var(--button-hover-dark);
-}
-
-/* Dark Mode Toggle */
-.dark-mode-toggle {
-    position: absolute;
-    top: 100px;
-    right: 20px;
+.create-blog-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
     cursor: pointer;
-    font-size: 24px;
-}
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  .flex-container > a > div {
+    width: 100%;
+  }
 
-.dark-mode .content{
-    color: white
-}
+.flex-container > a { 
+    flex-basis: 25%;
+  } 
+
