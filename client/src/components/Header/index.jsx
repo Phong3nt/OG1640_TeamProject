@@ -32,12 +32,12 @@ export const Header = () => {
           <Link
             to={
               user?.role === "student"
-                ? "/dashboard/student"
+                ? "/student"
                 : user?.role === "tutor"
-                  ? "/dashboard/tutor"
-                  : user?.role === "staff"
-                    ? "/dashboard/staff"
-                    : "/"
+                ? "/tutor"
+                : user?.role === "staff"
+                ? "/dashboard/staff"
+                : "/"
             }
           >
             <img src="logo2.webp" alt="Logo" className="logo-img" />
@@ -48,12 +48,12 @@ export const Header = () => {
             <Link
               to={
                 user?.role === "student"
-                  ? "/dashboard/student"
+                  ? "/student"
                   : user?.role === "tutor"
-                    ? "/dashboard/tutor"
-                    : user?.role === "staff"
-                      ? "/dashboard/staff"
-                      : "/"
+                  ? "/tutor"
+                  : user?.role === "staff"
+                  ? "/dashboard/staff"
+                  : "/"
               }
             >
               Home

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./LoginPage.css";
-import { FaSun, FaMoon, FaExclamationCircle } from "react-icons/fa"; // Icon Dark Mode & Lỗi
-import { useAuth } from "../../contexts/AuthContext"; // Import AuthContext
+import { FaSun, FaMoon, FaExclamationCircle } from "react-icons/fa";
+import { useAuth } from "../../contexts/AuthContext";
+const API_URL = "http://localhost:5000/api/users";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -18,34 +19,57 @@ const LoginPage = () => {
   }, [isDarkMode]);
 
   const validateForm = () => {
-    let errors = {};
-    if (!email) errors.email = "Email không được để trống!";
-    if (!password) errors.password = "Mật khẩu không được để trống!";
-    setError(errors);
-    return Object.keys(errors).length === 0;
+    const newError = { email: "", password: "", server: "" };
+    let valid = true;
+
+    if (!email) {
+      newError.email = "Vui lòng nhập email";
+      valid = false;
+    }
+    if (!password) {
+      newError.password = "Vui lòng nhập mật khẩu";
+      valid = false;
+    }
+
+    setError(newError);
+    return valid;
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return; // Kiểm tra hợp lệ trước khi gửi request
+    if (!validateForm()) return;
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/login",
-        { email, password }
-      );
+      const response = await axios.post(`${API_URL}/login`, {
+        email,
+        password,
+      });
+
       const { token, user } = response.data;
 
-      login(user); // Lưu thông tin người dùng vào AuthContext
-      localStorage.setItem("token", token); // Lưu token vào localStorage
+login(user); // Lưu thông tin người dùng vào AuthContext
+      // Lưu token và thông tin người dùng
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-      console.log("User Role:", user.role);
-      navigate(`/dashboard/${user.role}`); // Điều hướng thay vì window.location.href
-    } catch (error) {
-      console.error("Login error:", error.response?.data);
+      // Lấy role từ user
+      const role = user.role;
+
+      // Điều hướng theo role
+      if (role === "student") {
+        navigate("/student");
+      } else if (role === "tutor") {
+        navigate("/tutor");
+      } else if (role === "staff") {
+        navigate("/dashboard/staff");
+      } else {
+        navigate("/login"); // fallback nếu role không xác định
+      }
+    } catch (err) {
       setError({
-        ...error,
-        server: error.response?.data?.message || "Đăng nhập thất bại!",
+        email: "",
+        password: "",
+        server: err.response?.data?.message || "Đăng nhập thất bại!",
       });
     }
   };
