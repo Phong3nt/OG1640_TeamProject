@@ -110,8 +110,9 @@ button:hover {
 
 .dark-mode-toggle {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 51px;
+  right: 295px;
   cursor: pointer;
   font-size: 24px;
+  color:white
 }

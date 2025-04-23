@@ -9,6 +9,7 @@ const {
   resetPassword,
   createUser,
   getUsers,
+  getUsersByRole,
   getUserById,
   updateUser,
   deleteUser,
@@ -27,6 +28,14 @@ router.post("/adminLogin", (req, res) => {
       .json({ success: false, message: "Sai email hoặc mật khẩu" });
   }
 });
+const restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user || !req.user.role || !roles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'Bạn không có quyền truy cập chức năng này.' });
+    }
+    next();
+  };
+};
 
 // Route for user registration
 router.post("/register", registerUser);
@@ -48,6 +57,9 @@ router.post("/create", createUser);
 
 // Route for get all user
 router.get("/all", getUsers);
+
+//Route for get user by role
+router.get("/by-role", requireSignIn, restrictTo('staff'), getUsersByRole);
 
 // Route for get user
 router.get("/:id", getUserById);
