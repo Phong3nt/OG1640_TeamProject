@@ -144,9 +144,6 @@
 }
 
 .dark-mode-toggle {
-  position: absolute;
-  top: 51px;
-  right: 295px;
   cursor: pointer;
   font-size: 24px;
   color: white

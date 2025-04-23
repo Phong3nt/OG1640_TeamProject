@@ -13,16 +13,15 @@ export default function BlogList() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [userId, setUserId] = useState(null);
-  const [fullName, setFullName] = useState(""); // 👈 để lưu tên người dùng
+  const [fullName, setFullName] = useState(""); 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Lấy dữ liệu người dùng từ localStorage
     const userDataRaw = localStorage.getItem('user');
     if (userDataRaw) {
       const userData = JSON.parse(userDataRaw);
-      setUserId(userData.id || userData._id); // dùng id hoặc _id tùy backend
-      setFullName(userData.name); // 👈 lấy tên (name) làm fullName
+      setUserId(userData.id || userData._id); 
+      setFullName(userData.name);
     }
 
     document.body.className = isDarkMode ? "dark-mode" : "";

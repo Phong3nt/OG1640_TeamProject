@@ -47,4 +47,8 @@
     color: white;
     border-color: #007bff;
   }
+  button.create-btn{
+    width: fit-content;
+    margin-bottom: 15px;
+  }
   

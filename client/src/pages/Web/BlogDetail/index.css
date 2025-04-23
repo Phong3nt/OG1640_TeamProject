@@ -268,3 +268,6 @@
 .cancel-reply:hover {
   text-decoration: underline;
 }
+#root > main > div > div > div.blog-header > h2{
+  color: black
+}

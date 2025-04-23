@@ -1,0 +1,110 @@
+
+.blog-management-container {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 20px auto;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .blog-management-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+  }
+  
+  /* --- Bảng quản lý --- */
+  .management-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+  }
+  
+  .management-table th {
+    background-color: #f2f2f2;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: bold;
+    color: #555;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .management-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    vertical-align: middle;
+  }
+  
+  .management-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .management-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .management-table td[colSpan="4"] { /* Điều chỉnh colSpan nếu số cột thay đổi */
+    text-align: center;
+    font-style: italic;
+    color: #777;
+    padding: 20px;
+  }
+  
+  /* --- Cột hành động --- */
+  .action-cell {
+    text-align: center; /* Căn giữa các nút */
+    white-space: nowrap; /* Ngăn nút xuống dòng */
+  }
+  
+  .action-button {
+    padding: 5px 10px;
+    margin: 0 5px; /* Khoảng cách giữa các nút */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: opacity 0.2s;
+  }
+  
+  .action-button:hover {
+    opacity: 0.8;
+  }
+  
+  .edit-button {
+    background-color: #ffc107; /* Màu vàng */
+    color: #333;
+  }
+  
+  .delete-button {
+    background-color: #dc3545; /* Màu đỏ */
+    color: white;
+  }
+  
+  /* --- Thông báo trạng thái --- */
+  .status-message {
+      padding: 10px 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      font-size: 0.95em;
+      text-align: center;
+  }
+  .status-message.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+  }
+  .status-message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+  }
+
+  .edit-button,.delete-button{
+    width: fit-content;
+    font-weight: bolder;
+  }
