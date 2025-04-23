@@ -37,7 +37,7 @@ export default function Messenger(){
             <Message own={true} />
           </div>
           <div className="chatBoxBottom">
-            <textarea className="chatMessageInput" placeholder="write something..." rows="3"></textarea>
+            <textarea className="chatMessageInput" placeholder="Type here..." rows="2"/>
             <button className="chatSubmitButton">Send</button>
           </div>
         </div>
