@@ -1,19 +1,18 @@
-// middlewares/auth.js
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
-const requireSignIn = (req, res, next) => {
-  const token = req.header("Authorization");
-  if (!token) {
-    return res.status(401).json({ message: "Truy cập bị từ chối" });
+module.exports = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ message: 'Authorization header missing' });
   }
 
+  const token = authHeader.split(' ')[1];
   try {
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = verified;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
   } catch (error) {
-    res.status(400).json({ message: "Token không hợp lệ" });
+    console.error("Token Verification Error:", error.message); 
+    res.status(401).json({ message: 'Invalid or expired token' });
   }
 };
-
-module.exports = { requireSignIn };
