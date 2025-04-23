@@ -148,14 +148,15 @@ exports.getUsers = async (req, res) => {
 // Get a user by ID
 exports.getUserById = async (req, res) => {
   try {
-    const user = await UserService.getUserById(req.params.id);
+    const user = await User.findById(req.params.id).select("-password -confirmationToken");
     if (!user) return res.status(404).json({ message: "User not found" });
-    res.status(200).json(user);
+    res.status(200).json({ success: true, user });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 // Update a user
 exports.updateUser = async (req, res) => {

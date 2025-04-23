@@ -7,8 +7,8 @@ export const Footer = () => {
         <div>
           <h3 className="footer-title">My Account</h3>
           <ul className="footer-links">
-            <li><a href="/account">Schedule</a></li>
-            <li><a href="/account">Profile</a></li>
+            <li><a href="/meeting">Schedule</a></li>
+            <li><a href="/profile">Profile</a></li>
             <li><a href="/blogs">Blogs</a></li>
           </ul>
         </div>

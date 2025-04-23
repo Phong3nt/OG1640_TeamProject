@@ -1,12 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const { requireSignIn } = require("../middlewares/auth");
-const {
-  updateProfileController,
-  registerController,
-  loginController,
-  forgotPasswordController,
-} = require("../controllers/authController");
+const profileController = require("../controllers/profileController");
 
 const router = express.Router();
 
@@ -21,13 +16,11 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-router.post("/register", registerController);
-router.post("/login", loginController);
-router.post("/forgot-password", forgotPasswordController);
-router.get("/profile/:id", profileController.getProfile);
 
-router.put("/profile/update", requireSignIn, updateProfileController);
+// Lấy thông tin người dùng hiện tại
+router.get("/profile/me", requireSignIn, profileController.getProfile);
 
-//router.put("/me", requireSignIn, upload.single("avatar"), updateProfile);
+// Cập nhật thông tin người dùng hiện tại + ảnh đại diện
+router.put("/profile/me", requireSignIn, upload.single("avatar"), profileController.updateProfile);
 
 module.exports = router;
