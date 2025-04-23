@@ -22,6 +22,7 @@ import AllocationPage from "../pages/AllocationPage/AllocationPage";
 
 // staff Feature Pages
 import UserManagement from "../components/Admin/UserManagement";
+import BlogManagement from "../components/Admin/BlogManagement"
 
 // Protected route wrapper
 const ProtectedRoute = ({ children, role }) => {
@@ -92,6 +93,7 @@ export const Router = () => {
       >
         <Route index element={<AdminHomePage />} />
         <Route path="users" element={<UserManagement />} />
+        <Route path="blogs" element={<BlogManagement />} />
         {/* Add more staff routes here if needed */}
       </Route>
 

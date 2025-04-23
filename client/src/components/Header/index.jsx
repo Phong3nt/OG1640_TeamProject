@@ -34,10 +34,10 @@ export const Header = () => {
               user?.role === "student"
                 ? "/student"
                 : user?.role === "tutor"
-                ? "/tutor"
-                : user?.role === "staff"
-                ? "/dashboard/staff"
-                : "/"
+                  ? "/tutor"
+                  : user?.role === "staff"
+                    ? "/dashboard/staff"
+                    : "/"
             }
           >
             <img src="logo2.webp" alt="Logo" className="logo-img" />
@@ -50,10 +50,10 @@ export const Header = () => {
                 user?.role === "student"
                   ? "/student"
                   : user?.role === "tutor"
-                  ? "/tutor"
-                  : user?.role === "staff"
-                  ? "/dashboard/staff"
-                  : "/"
+                    ? "/tutor"
+                    : user?.role === "staff"
+                      ? "/dashboard/staff"
+                      : "/"
               }
             >
               Home
@@ -74,10 +74,20 @@ export const Header = () => {
           <li>
             <Link to="/contact">Contact</Link>
           </li>
+          {user && user.role === 'staff' && (
+            <>
+              <li>
+                <Link to="/allocations">Allocation</Link>
+              </li>
+              <li>
+                <Link to="/dashboard/staff">Staff Dashboard</Link>
+              </li>
+            </>
+          )}
+          <li className="dark-mode-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
+            {isDarkMode ? <FaSun size={24} /> : <FaMoon size={24} />}
+          </li>
         </ul>
-        <div className="dark-mode-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
-          {isDarkMode ? <FaSun size={24} /> : <FaMoon size={24} />}
-        </div>
 
         <div className="auth-section">
           {user ? (

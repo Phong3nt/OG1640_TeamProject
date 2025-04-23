@@ -1,6 +1,3 @@
-/* File: AllocationPage.css hoặc file CSS tương ứng */
-
-/* --- Container chung (Tùy chọn) --- */
 .allocation-page-container {
     padding: 20px;
     max-width: 1200px; /* Giới hạn chiều rộng tối đa */
@@ -181,3 +178,47 @@
   .status-overdue{
     background-color: red;
   }
+  body.dark-mode {
+    background-color: #1a1a1a; /* Nền tối cho toàn bộ trang */
+    color: #e0e0e0;           /* Màu chữ sáng mặc định cho toàn bộ trang */
+  }
+  
+  /* Ghi đè style cho container chính trong dark mode */
+  body.dark-mode .allocation-page-container {
+     background-color: #2a2a2a; /* Nền tối hơn một chút cho phần nội dung */
+     color: #e0e0e0;           /* Đảm bảo chữ trong container là màu sáng */
+     /* Có thể thêm border hoặc thay đổi shadow nếu muốn */
+     /* border: 1px solid #444; */
+     /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.7); */
+  }
+  
+  /* Ghi đè màu cho các tiêu đề */
+  body.dark-mode .allocation-page-container h1,
+  body.dark-mode .allocation-page-container h2 {
+    color: #f5f5f5; /* Màu trắng sáng hơn cho tiêu đề */
+  }
+  
+  /* Ghi đè màu cho label của các ô select */
+  body.dark-mode .selector-group label {
+    color: #bbb; /* Màu xám sáng hơn */
+  }
+  
+  body.dark-mode .selector-group select {
+      background-color: #333; 
+      color: #e0e0e0;        
+      border-color: #555;     
+  }
+  /* Style cho option bên trong select (có thể không hoạt động trên mọi trình duyệt) */
+  body.dark-mode .selector-group select option {
+      background-color: #333;
+      color: #e0e0e0;
+  }
+  body.dark-mode #student-select > div {
+        background-color: #333; 
+      color: #e0e0e0;        
+      border-color: #555;  
+  }
+  
+ 
+  
+ 

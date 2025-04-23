@@ -92,7 +92,7 @@ exports.getCommentsByBlog = async (req, res) => {
 
     try {
         const comments = await Comment.find({ blog: blogId, parentComment: null }) // Sử dụng trường 'blog'
-            .populate('commenter', 'username avatar')
+            .populate('commenter', 'fullName username avatar')
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
@@ -137,7 +137,7 @@ exports.getRepliesByComment = async (req, res) => {
 
         // Tìm các comment có parentComment là commentId này
         const replies = await Comment.find({ parentComment: commentId })
-            .populate('commenter', 'username avatar')
+            .populate('commenter', 'fullName username avatar')
             .sort({ createdAt: 1 }) // Thường sắp xếp replies từ cũ -> mới
             .skip(skip)
             .limit(limit);
@@ -182,7 +182,7 @@ exports.likeComment = async (req, res) => {
             commentId,
             { $addToSet: { likes: userId } }, // $addToSet ngăn trùng lặp
             { new: true } // Trả về document sau khi cập nhật
-        ).populate('commenter', 'username avatar'); // Populate lại để có thông tin mới nhất (nếu cần)
+        ).populate('commenter', 'fullName username avatar'); // Populate lại để có thông tin mới nhất (nếu cần)
 
         // Kiểm tra lại phòng trường hợp comment bị xóa ngay sau findComment
         if (!updatedComment) {
@@ -219,7 +219,7 @@ exports.unlikeComment = async (req, res) => {
             commentId,
             { $pull: { likes: userId } }, // $pull xóa tất cả các instance của userId
             { new: true }
-        ).populate('commenter', 'username avatar');
+        ).populate('commenter', 'fullName username avatar');
 
          if (!updatedComment) {
              return res.status(404).json({ message: 'Không tìm thấy bình luận sau khi thử cập nhật.' });
