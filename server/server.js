@@ -7,7 +7,7 @@ const connectDB = require('./src/config/db');
 const userRoutes = require('./src/routes/userRoutes');
 const blogRoutes = require('./src/routes/blogRoutes');
 // const messageRoutes = require('./src/routes/messageRoutes');
-// const meetingRoutes = require('./src/routes/meetingRoutes');
+const meetingRoutes = require('./src/routes/meetingRoutes');
 // const fileRoutes = require('./src/routes/fileRoutes');
 // const postRoutes = require('./src/routes/postRoutes');
 // const commentRoutes = require('./src/routes/commentRoutes');
@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
  app.use('/api/users', userRoutes);
 // app.use('/api/messages', messageRoutes);
-// app.use('/api/meetings', meetingRoutes);
+app.use('/api/meetings', meetingRoutes);
 // app.use('/api/files', fileRoutes);
  app.use('/api/blogs', blogRoutes);
 // app.use('/api/posts', postRoutes);
