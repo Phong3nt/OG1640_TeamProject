@@ -1,61 +1,131 @@
 .messenger{
-  height: calc(100vh - 70px);
+  height: calc(100vh - 100px);
   display: flex;
+  background-color: #f0f2f5;
+  font-family: "Segoe UI",
 }
 
 .chatMenu{
   flex: 3.5;
+  border-right: 1px solid #ccc;
+  background-color: white;
 }
 
-.chatMenuInput{
-  width: 90%;
-  padding: 10px 0;
-  border: none;
-  border-bottom: 1px solid lightgray;
+.chatMenuWrapper {
+  padding: 15px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
+
+.chatMenuTitle {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.chatMenuInput {
+  width: 80%;
+  height: 30px;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  background-color: #f0f2f5;
+}
+
 
 .chatBox{
   flex: 5.5;
-}
-
-.chatBoxWrapper{
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  background-color: #ebe8e8;
 }
 
-
-.chatBoxTop{
-  height: 100%;
-  overflow-y: scroll;
-  padding-right: 10px;
-}
-
-.chatBoxBottom{
+.chatBoxWrapper {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  height: 100%;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  background-color: #dddcdc;
+}
+
+
+.chatBoxTop {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-bottom: 10px;
+  scrollbar-width: thin;
+}
+
+.chatBoxTop::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatBoxTop::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 3px;
+}
+
+.chatBoxBottom {
+  display: flex;
   align-items: center;
-  margin-top: 5px;
-}
-
-.chatMessageInput{
-  width: 80%;
-  height: 20px;
   padding: 10px;
+  gap: 10px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
 }
 
-.chatSubmitButton{
-  width: 70px;
+.chatMessageInput {
+  flex: 1;
+  resize: none;
+  padding: 5px 15px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  background-color: #f0f2f5;
   height: 40px;
+}
+
+.chatSubmitButton {
+  width: 80px;
+  height: 45px;
   border: none;
-  border-radius: 5px;
-  background-color: teal;
+  border-radius: 20px;
+  background-color: #0084ff;
   color: white;
+  font-weight: 600;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.chatSubmitButton:hover {
+  background-color: #006fe0;
 }
 
 .chatOnline{
   flex: 3;
+  border-left: 1px solid #ccc;
+  background-color: white;
+}
+
+.chatOnlineWrapper {
+  padding: 15px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.chatBoxTopWrapper {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .chatMenuWrapper, .chatBoxWrapper, .chatOnlineWrapper{
