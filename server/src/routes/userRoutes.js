@@ -70,4 +70,5 @@ router.put("/:id", updateUser);
 // Route for delete user
 router.delete("/:id", deleteUser);
 
+
 module.exports = router;

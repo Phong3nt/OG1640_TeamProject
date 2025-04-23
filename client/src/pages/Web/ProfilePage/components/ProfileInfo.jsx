@@ -5,15 +5,11 @@ const ProfileInfo = ({ user, onEdit, onChangePassword }) => {
         <div className="profile-info">
             <div className="form-group">
                 <label>Name</label>
-                <input type="text" value={user.name} disabled />
+                <input type="text" value={user.fullName} disabled />
             </div>
             <div className="form-group">
                 <label>Email</label>
                 <input type="email" value={user.email} disabled />
-            </div>
-            <div className="form-group">
-                <label>Address</label>
-                <input type="text" value={user.address} disabled />
             </div>
             <div className="form-group">
                 <label>Phone Number</label>

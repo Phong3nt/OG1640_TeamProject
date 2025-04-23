@@ -7,6 +7,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const connectDB = require("./src/config/db");
 const userRoutes = require("./src/routes/userRoutes");
+const profileRoutes = require("./src/routes/profileRoutes");
 const blogRoutes = require("./src/routes/blogRoutes");
 const commentRoutes = require('./src/routes/commentRoutes');
 const allocationRoutes = require('./src/routes/tutorAllocationRoutes');
@@ -31,6 +32,8 @@ app.use(morgan("dev"));
 app.use(express.json());
 //app.use(express.static("public"));
 //app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/uploads", express.static("uploads"));
+app.use("/api", profileRoutes); // ✅ profile routes
 
 app.use("/api/users", userRoutes);
 // app.use('/api/messages', messageRoutes);
