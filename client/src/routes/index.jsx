@@ -1,86 +1,101 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
+
+// Layouts
 import Layout from "../components/Layout";
+import AdminLayout from "../components/Admin/AdminLayout";
+
+// Public & Auth Pages
 import LoginPage from "../pages/Login/LoginPage";
-import MeetingPage from "../pages/Web/MeetingPage";
+
+// Role-based HomePages
 import StudentHomePage from "../pages/Web/HomePage/student";
 import TutorHomePage from "../pages/Web/HomePage/tutor";
-import StaffDashboard from "../pages/Web/HomePage/staff";
 import BlogPage from "../pages/Web/BlogPage/blogPage";
 import BlogDetail from "../pages/Web/BlogDetail/blogDetails";
+import AdminHomePage from "../pages/Web/HomePage/admin";
+
+// Feature Pages
+import MeetingPage from "../pages/Web/MeetingPage";
 import ProfilePage from "../pages/Web/ProfilePage/index";
 import Messenger from "../pages/Messenger/Messenger";
 import AllocationPage from "../pages/AllocationPage/AllocationPage";
-import { useAuth } from "../contexts/AuthContext";
 
-// ProtectedRoute component to guard access to protected routes
-const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { user } = useAuth();
+// staff Feature Pages
+import UserManagement from "../components/Admin/UserManagement";
+
+// Protected route wrapper
+const ProtectedRoute = ({ children, role }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
   if (!user) return <Navigate to="/login" replace />;
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/login" replace />;
-  }
+  if (role && user.role !== role) return <Navigate to="/login" replace />;
   return children;
 };
 
 export const Router = () => {
-  const { user } = useAuth();
-
   return (
     <Routes>
-      {/* Public Routes */}
+      {/* Public route */}
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/" element={<Navigate to="/login" replace />} />
 
-      {/* Protected Routes with Layout */}
-      <Route element={<Layout />}>
-        <Route path="/meeting" element={<ProtectedRoute><MeetingPage /></ProtectedRoute>} />
-        <Route path="/blogs" element={<ProtectedRoute><BlogPage /></ProtectedRoute>} />
-        <Route path="/blog/:id" element={<ProtectedRoute><BlogDetail /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-        <Route path="/message" element={<ProtectedRoute><Messenger /></ProtectedRoute>} />
-        <Route path="/allocations" element={<ProtectedRoute allowedRoles={['staff']}><AllocationPage /></ProtectedRoute>} />
+      {/* Root redirect based on role */}
+      <Route
+        path="/"
+        element={(() => {
+          const user = JSON.parse(localStorage.getItem("user"));
+          if (!user) return <Navigate to="/login" replace />;
+          if (user.role === "staff")
+            return <Navigate to="/dashboard/staff" replace />;
+          return <Navigate to={`/${user.role}`} replace />;
+        })()}
+      />
 
-        {/* Dashboard Redirect by Role */}
+      {/* Student & Tutor Layout (General Layout) */}
+      <Route
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
         <Route
-          path="/dashboard"
+          path="/student"
           element={
-            user?.role ? (
-              <Navigate to={`/dashboard/${user.role}`} replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
-
-        {/* Role-Based Dashboards */}
-        <Route
-          path="/dashboard/student"
-          element={
-            <ProtectedRoute allowedRoles={['student']}>
+            <ProtectedRoute role="student">
               <StudentHomePage />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/dashboard/tutor"
+          path="/tutor"
           element={
-            <ProtectedRoute allowedRoles={['tutor']}>
+            <ProtectedRoute role="tutor">
               <TutorHomePage />
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/dashboard/staff"
-          element={
-            <ProtectedRoute allowedRoles={['staff']}>
-              <StaffDashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/meeting" element={<MeetingPage />} />
+        <Route path="/blogs" element={<ProtectedRoute><BlogPage /></ProtectedRoute>} />
+        <Route path="/blog/:id" element={<ProtectedRoute><BlogDetail /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        <Route path="/message" element={<ProtectedRoute><Messenger /></ProtectedRoute>} />
+        <Route path="/allocations" element={<ProtectedRoute allowedRoles={['staff']}><AllocationPage /></ProtectedRoute>} />
       </Route>
 
-      {/* Fallback Route */}
+      {/* staff Layout and routes */}
+      <Route
+        path="/dashboard/staff"
+        element={
+          <ProtectedRoute role="staff">
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<AdminHomePage />} />
+        <Route path="users" element={<UserManagement />} />
+        {/* Add more staff routes here if needed */}
+      </Route>
+
+      {/* Fallback route */}
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );
