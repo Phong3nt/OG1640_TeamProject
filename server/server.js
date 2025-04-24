@@ -11,8 +11,10 @@ const profileRoutes = require("./src/routes/profileRoutes");
 const blogRoutes = require("./src/routes/blogRoutes");
 const commentRoutes = require('./src/routes/commentRoutes');
 const allocationRoutes = require('./src/routes/tutorAllocationRoutes');
+const taskRoutes = require("./src/routes/taskRoutes");
+const cookieParser = require("cookie-parser");
 
-// const profileRoutes = require("./src/routes/profileRoutes");
+
 // const messageRoutes = require('./src/routes/messageRoutes');
 // const meetingRoutes = require('./src/routes/meetingRoutes');
 // const fileRoutes = require('./src/routes/fileRoutes');
@@ -25,15 +27,19 @@ const allocationRoutes = require('./src/routes/tutorAllocationRoutes');
 dotenv.config();
 const app = express();
 connectDB();
-
+// ✅ Fix CORS for credentials
+app.use(cors({
+    origin: 'http://localhost:3000',   // CHÍNH XÁC frontend origin
+    credentials: true                  // Cho phép gửi cookie/token
+  }));
 // Cấu hình middleware
-app.use(cors()); // Cho phép frontend React truy cập
 app.use(morgan("dev"));
 app.use(express.json());
 //app.use(express.static("public"));
 //app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
 app.use("/api", profileRoutes); // ✅ profile routes
+app.use(cookieParser()); // ủa có profile route hả có chiều m fix có mà quên merge vharddaau t dùng user chơ mấy nhở vl t pull code xuống thấy
 
 app.use("/api/users", userRoutes);
 // app.use('/api/messages', messageRoutes);
@@ -42,13 +48,16 @@ app.use("/api/users", userRoutes);
 app.use("/api", blogRoutes);
 app.use('/api', commentRoutes);
 app.use('/api/allocations', allocationRoutes);
+app.use("/api/tasks", taskRoutes); // <-- đăng ký routes cho tasks
+
 // app.use('/api/posts', postRoutes);
 // app.use('/api/recordings', recordingRoutes);
 // app.use('/api/reports', reportRoutes);
 // app.use('/api/dashboard', dashboardRoutes);
 // app.use('/api/conversation', conversationRoutes);
-// app.use("/api/profile", profileRoutes);
-
+ app.use("/api/profile", profileRoutes);
+ app.use("/uploads", express.static("uploads"));
+ app.use("/api", profileRoutes); // ✅ profile routes
 // Chạy server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

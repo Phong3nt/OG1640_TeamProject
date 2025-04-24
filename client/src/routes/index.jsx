@@ -19,6 +19,7 @@ import MeetingPage from "../pages/Web/MeetingPage";
 import ProfilePage from "../pages/Web/ProfilePage/index";
 import Messenger from "../pages/Messenger/Messenger";
 import AllocationPage from "../pages/AllocationPage/AllocationPage";
+import TasksPage from "../pages/Tasks/TasksPage"; // ✅ Import TasksPage
 
 // staff Feature Pages
 import UserManagement from "../components/Admin/UserManagement";
@@ -80,6 +81,7 @@ export const Router = () => {
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/message" element={<ProtectedRoute><Messenger /></ProtectedRoute>} />
         <Route path="/allocations" element={<ProtectedRoute allowedRoles={['staff']}><AllocationPage /></ProtectedRoute>} />
+        <Route path="/tasks" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} /> {/* ✅ Route mới */}
       </Route>
 
       {/* staff Layout and routes */}

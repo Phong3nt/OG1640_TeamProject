@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 // @access  Private
 const getProfile = async (req, res) => {
   try {
-    const userId = req.user._id || req.user.id;
+    const userId = req.user._id;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "ID người dùng không hợp lệ" });
@@ -35,7 +35,7 @@ const getProfile = async (req, res) => {
 // @access  Private
 const updateProfile = async (req, res) => {
   try {
-    const userId = req.user._id || req.user.id;
+    const userId = req.user._id;
 
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return res.status(400).json({ message: "ID người dùng không hợp lệ" });
