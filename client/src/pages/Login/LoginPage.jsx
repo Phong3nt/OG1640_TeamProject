@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link  } from "react-router-dom";
 import axios from "axios";
 import "./LoginPage.css";
 import { FaSun, FaMoon, FaExclamationCircle } from "react-icons/fa"; // Icon Dark Mode & Lỗi
@@ -99,6 +99,10 @@ const LoginPage = () => {
           )}
 
           <button type="submit">Đăng nhập</button>
+          <p className="link-row\">
+            <Link to="/register\">Chưa có tài khoản?</Link>
+            <Link to="/forgot-password\">Quên mật khẩu?</Link>
+          </p>
         </form>
       </div>
     </div>

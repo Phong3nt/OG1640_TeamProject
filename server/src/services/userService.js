@@ -1,21 +1,24 @@
-    // services/userService.js
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const { sendConfirmationEmail, sendResetPasswordEmail } = require('./emailService');
+const User  = require('../models/User');
+const bcrypt= require('bcryptjs');
+const jwt   = require('jsonwebtoken');
+const { sendSystem }  = require('./mailService');
+const { loadTemplate }= require('./emailService');
 
 // Register a new user
-exports.register = async (userData) => {
-  const { fullName, email, phone, password, role } = userData;
-
-  const userExists = await User.findOne({ email });
-  if (userExists) throw new Error('User already exists');
-
-  const user = await User.create({ fullName, email, phone, password, role });
-  sendConfirmationEmail(user.email, user.confirmationToken);
-
-  return user;
-};
+exports.register = async ({ fullName, email, phone, password, role }) => {
+    if (await User.findOne({ email })) throw new Error('Email đã tồn tại');
+  
+    const user = await User.create({ fullName, email, phone, password, role });
+  
+    // gửi mail kích hoạt
+    const html = loadTemplate('activateAccount.html', {
+      NAME: fullName,
+      LINK: `${process.env.CLIENT_URL}/confirm/${user._id}`     // ví dụ xác nhận đơn giản
+    });
+    await sendSystem(email, 'Kích hoạt tài khoản eTutoring', html);
+  
+    return user;
+  };
 
 // Authenticate user and generate JWT
 exports.authenticate = async (email, password) => {
@@ -30,24 +33,35 @@ exports.authenticate = async (email, password) => {
 
 // Request password reset
 exports.requestPasswordReset = async (email) => {
-  const user = await User.findOne({ email });
-  if (!user) throw new Error('User not found');
-
-  const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
-  sendResetPasswordEmail(user.email, resetToken);
-
-  return resetToken;
-};
+    const user = await User.findOne({ email });
+    if (!user) throw new Error('User not found');
+  
+    // sinh mật khẩu tạm
+    const tempPass = Math.random().toString(36).slice(-10);
+    user.password  = tempPass;               // bcrypt hash qua middleware model
+    await user.save();
+  
+    const html = loadTemplate('newPassword.html', {
+      NAME: user.fullName,
+      PASSWORD: tempPass
+    });
+    await sendSystem(email, 'Mật khẩu mới cho tài khoản eTutoring', html);
+  };
 
 // Reset user password
-exports.resetPassword = async (token, newPassword) => {
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  const user = await User.findById(decoded.id);
-  if (!user) throw new Error('Invalid token');
-
-  user.password = newPassword;
-  await user.save();
-};
+exports.changePassword = async (userId, newPass) => {
+    const user = await User.findById(userId);
+    if (!user) throw new Error('User not found');
+  
+    user.password = newPass;
+    await user.save();
+  
+    const html = loadTemplate('passwordChanged.html', {
+      NAME: user.fullName,
+      TIME: new Date().toLocaleString('vi-VN')
+    });
+    await sendSystem(user.email, 'Bạn đã đổi mật khẩu thành công', html);
+  };
 
 // Create a new user
 exports.createUser = async (userData) => {

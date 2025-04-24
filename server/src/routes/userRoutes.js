@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { registerUser, loginUser, logoutUser, forgotPassword, resetPassword } = require('../controllers/userController');
+const { registerUser, confirmEmail, loginUser, logoutUser, forgotPassword, changePassword } = require('../controllers/userController');
 const { createUser, getUsers , getUserById, updateUser, deleteUser } = require('../controllers/userController');
 const auth = require('../middlewares/auth');
 
@@ -19,6 +19,7 @@ router.post('/adminLogin', (req, res) => {
 
 // Route for user registration
 router.post('/register', registerUser);
+router.get('/confirm/:id', confirmEmail);
 
 // Route for user login
 router.post('/login', loginUser);
@@ -30,7 +31,7 @@ router.post('/logout',auth, logoutUser);
 router.post('/forgot-password', forgotPassword);
 
 // Route for resetting password
-router.post('/reset-password/:token', resetPassword);
+router.put('/change-password',auth, changePassword);
 
 // Route for create user
 router.post('/create', createUser);

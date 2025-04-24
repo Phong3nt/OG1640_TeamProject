@@ -1,8 +1,20 @@
-// [Feature] Create Conversation Controller - v1
-// Task: Manage chat conversations between users.
-// Assigned to: Name4
+const conversationService = require('../services/conversationService');
 
-// TODO: Implement creating a conversation
-// TODO: Implement fetching user conversations
-// TODO: Implement updating last message in a conversation
-// TODO: Implement deleting a conversation (soft delete)
+exports.create = async (req, res) => {
+  const { partnerId } = req.body;
+  const convo = await conversationService.getOrCreate(req.user._id, partnerId);
+  res.json(convo);
+};
+
+exports.list = async (req, res) => {
+  const convos = await require('../models/Conversation')
+      .find({ participants: req.user._id, deletedBy: { $ne: req.user._id } })
+      .populate('lastMessage')
+      .sort({ updatedAt: -1 });
+  res.json(convos);
+};
+
+exports.remove = async (req, res) => {
+  const convo = await conversationService.softDelete(req.params.id, req.user._id);
+  res.json(convo);
+};

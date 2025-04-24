@@ -3,25 +3,30 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { sendConfirmationEmail, sendResetPasswordEmail } = require('../services/emailService');
 const UserService = require('../services/userService');
 
 // Register a new user
 exports.registerUser = async (req, res) => {
-  const { fullName, email, phone, password, role } = req.body;
-  try {
-    const userExists = await User.findOne({ email });
-    if (userExists) return res.status(400).json({ message: 'User already exists' });
+    try {
+      await UserService.register(req.body);
+      res.status(201).json({ message: 'Đăng ký thành công – kiểm tra email để kích hoạt' });
+    } catch (e) { res.status(400).json({ message: e.message }); }
+  };
 
-    const user = await User.create({ fullName, email, phone, password, role });
-    sendConfirmationEmail(user.email, user.confirmationToken);
-
-    res.status(201).json({ message: 'Registration successful. Please check your email to confirm your account.' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
+  exports.confirmEmail = async (req, res) => {
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) return res.status(404).send('User not found');
+  
+      if (user.isConfirmed) return res.send('Tài khoản đã kích hoạt');
+  
+      user.isConfirmed = true;
+      await user.save();
+      res.send('Kích hoạt thành công – bạn có thể đăng nhập');
+    } catch (e) {
+      res.status(500).send('Server error');
+    }
+  };
 // Login user and return JWT
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -71,36 +76,20 @@ exports.logoutUser = (req, res) => {
 
 // Forgot password
 exports.forgotPassword = async (req, res) => {
-  const { email } = req.body;
-  try {
-    const user = await User.findOne({ email });
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
-    sendResetPasswordEmail(user.email, resetToken);
-
-    res.status(200).json({ message: 'Password reset email sent' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+    try {
+      await UserService.requestPasswordReset(req.body.email);
+    } finally {
+      res.json({ message: 'Nếu email tồn tại, mật khẩu mới đã được gửi' });
+    }
+  };
 
 // Reset password
-exports.resetPassword = async (req, res) => {
-  const { token } = req.params;
-  const { password } = req.body;
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
-    if (!user) return res.status(404).json({ message: 'Invalid token' });
-
-    user.password = password;
-    await user.save();
-    res.status(200).json({ message: 'Password reset successful' });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+exports.changePassword = async (req, res) => {
+    try {
+      await UserService.changePassword(req.user._id, req.body.newPassword);
+      res.json({ message: 'Đổi mật khẩu thành công' });
+    } catch (e) { res.status(400).json({ message: e.message }); }
+  };
 
 // Create a new user
 exports.createUser = async (req, res) => {

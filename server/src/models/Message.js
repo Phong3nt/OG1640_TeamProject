@@ -1,22 +1,15 @@
 const mongoose = require('mongoose');
+const { Schema, model, Types } = mongoose;
 
-const messageSchema = new mongoose.Schema({
-  conversationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Conversation', required: true, index: true }, // Tham chiếu đến cuộc hội thoại
-  sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true }, // Người gửi
-  content: { type: String, trim: true }, // Nội dung tin nhắn
-  type: {
-    type: String,
-    enum: ['text', 'file', 'image', 'video', 'audio'],
-    default: 'text'
-  }, // Loại tin nhắn
-  status: {
-    type: String,
-    enum: ['sent', 'delivered', 'read'],
-    default: 'sent',
-    index: true
-  }, // Trạng thái tin nhắn
-  isDeleted: { type: Boolean, default: false }, // Soft delete
-  repliedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'Message', default: null } // Reply tới message khác
+const messageSchema = new Schema({
+  conversationId: { type: Types.ObjectId, ref: 'Conversation', required: true, index: true },
+  sender:         { type: Types.ObjectId, ref: 'User', required: true, index: true },
+  content:        { type: String, trim: true, default: '' },
+  type:           { type: String, enum: ['text','file','image','video','audio'], default: 'text' },
+  status:         { type: String, enum: ['sent','delivered','read'], default: 'sent', index: true },
+  readBy:         { type: [Types.ObjectId], default: [] },   // A,B – nhanh gọn
+  deletedBy:      { type: [Types.ObjectId], default: [] },   // soft delete per user
+  repliedTo:      { type: Types.ObjectId, ref: 'Message', default: null }
 }, { timestamps: true });
 
-module.exports = mongoose.model('Message', messageSchema);
+module.exports = model('Message', messageSchema);
