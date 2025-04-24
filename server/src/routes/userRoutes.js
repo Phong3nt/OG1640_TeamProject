@@ -9,7 +9,6 @@ const {
   resetPassword,
   createUser,
   getUsers,
-  getUsersByRole,
   getUserById,
   updateUser,
   deleteUser,
@@ -17,10 +16,10 @@ const {
 const { requireSignIn } = require("../middlewares/auth");
 
 // API Đăng nhập
-router.post("/staffLogin", (req, res) => {
+router.post("/adminLogin", (req, res) => {
   const { email, password } = req.body;
   // test thử
-  if (email === "staff@etutoring.com" && password === "123456") {
+  if (email === "admin@etutoring.com" && password === "123456") {
     return res.json({ success: true, message: "Đăng nhập thành công!" });
   } else {
     return res
@@ -28,14 +27,6 @@ router.post("/staffLogin", (req, res) => {
       .json({ success: false, message: "Sai email hoặc mật khẩu" });
   }
 });
-const restrictTo = (...roles) => {
-  return (req, res, next) => {
-    if (!req.user || !req.user.role || !roles.includes(req.user.role)) {
-      return res.status(403).json({ message: 'Bạn không có quyền truy cập chức năng này.' });
-    }
-    next();
-  };
-};
 
 // Route for user registration
 router.post("/register", registerUser);
@@ -58,11 +49,9 @@ router.post("/create", createUser);
 // Route for get all user
 router.get("/all", getUsers);
 
-//Route for get user by role
-router.get("/by-role", requireSignIn, restrictTo('staff'), getUsersByRole);
-
 // Route for get user
 router.get("/:id", getUserById);
+
 
 // Route for update user
 router.put("/:id", updateUser);

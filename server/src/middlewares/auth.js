@@ -1,9 +1,14 @@
 const jwt = require("jsonwebtoken");
 
 const requireSignIn = (req, res, next) => {
-  const token = req.header("Authorization");
+  let token = null;
+
+  if (req.header("Authorization")?.startsWith("Bearer ")) {
+    token = req.header("Authorization").replace("Bearer ", "");
+  }
+
   if (!token) {
-    return res.status(401).json({ message: "Truy cập bị từ chối" });
+    return res.status(401).json({ message: "Truy cập bị từ chối. Token không được cung cấp." });
   }
 
   try {
@@ -11,7 +16,8 @@ const requireSignIn = (req, res, next) => {
     req.user = verified;
     next();
   } catch (error) {
-    res.status(400).json({ message: "Token không hợp lệ" });
+    return res.status(401).json({ message: "Token không hợp lệ" });
   }
 };
+
 module.exports = { requireSignIn };

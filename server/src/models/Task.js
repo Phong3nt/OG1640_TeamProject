@@ -1,21 +1,39 @@
 const mongoose = require("mongoose");
 
-const taskSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String },
-  exerciseFile: { type: String }, // Đường dẫn file bài tập
-  submittedFile: { type: String }, // Đường dẫn bài làm của học sinh
-  student: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  tutor: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  comments: [
-    {
-      author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-      content: String,
-      createdAt: { type: Date, default: Date.now },
+const taskSchema = new mongoose.Schema(
+  {
+    tutorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-  ],
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-});
+    studentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+    },
+    filePath: {
+      type: String, // Đường dẫn bài tập từ tutor
+    },
+    answerFilePath: {
+      type: String, // File học sinh nộp
+    },
+    comments: [
+      {
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        text: String,
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Task", taskSchema);
