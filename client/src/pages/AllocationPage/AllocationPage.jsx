@@ -149,7 +149,6 @@ export default function AllocationPage() {
 
     // --- Handle Deactivate ---
     const handleDeactivate = async (allocationId) => {
-        // Giữ nguyên confirm tiếng Việt hoặc đổi sang tiếng Anh
         if (!window.confirm('Are you sure you want to deactivate this allocation?')) {
             return;
         }
@@ -164,20 +163,15 @@ export default function AllocationPage() {
         }
     };
 
-    // --- Render component ---
     return (
         <div className="allocation-page-container">
-            {/* Title */}
             <h1>Tutor Allocation</h1>
 
-            {/* Loading/Error for User Lists */}
             {usersLoading && <p>Loading user lists...</p>}
             {usersError && <p className="error-message">{usersError}</p>}
 
-            {/* Allocation Controls */}
             {!usersLoading && !usersError && (
                 <div className="allocation-controls">
-                    {/* Student Selector */}
                     <div className="selector-group">
                         <label htmlFor="student-select">Select Student(s):</label>
                         <Select

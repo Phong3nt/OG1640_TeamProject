@@ -1,0 +1,127 @@
+/* File: src/components/EditBlogModal/EditBlogModal.css */
+
+.modal-overlay {
+    position: fixed; /* Che phủ toàn màn hình */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6); /* Nền mờ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Đảm bảo nổi lên trên */
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    max-width: 600px; /* Giới hạn chiều rộng */
+    width: 90%;
+    max-height: 90vh; /* Giới hạn chiều cao */
+    overflow-y: auto; /* Cho phép cuộn nếu nội dung dài */
+    position: relative;
+  }
+    
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .modal-title {
+    margin: 0;
+    font-size: 1.5em;
+    color: #333;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #888;
+    padding: 0;
+    line-height: 1;
+  }
+  .close-button:hover {
+      color: #333;
+  }
+  
+  /* Sử dụng lại style form từ CreateNewBlog hoặc định nghĩa mới */
+  .edit-blog-modal .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .edit-blog-modal label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .edit-blog-modal input[type="text"],
+  .edit-blog-modal input[type="url"],
+  .edit-blog-modal textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Quan trọng */
+  }
+  .edit-blog-modal textarea {
+      resize: vertical; /* Cho phép thay đổi chiều cao textarea */
+  }
+  
+  
+  .edit-blog-modal .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* Khoảng cách giữa các nút */
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+  }
+  
+  .edit-blog-modal .cancel-btn,
+  .edit-blog-modal .save-btn {
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .edit-blog-modal .cancel-btn {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    color: #555;
+  }
+  .edit-blog-modal .cancel-btn:hover {
+      background-color: #e0e0e0;
+  }
+  
+  .edit-blog-modal .save-btn {
+    background-color: #007bff;
+    color: white;
+  }
+  .edit-blog-modal .save-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .edit-blog-modal .save-btn:disabled,
+  .edit-blog-modal .cancel-btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      opacity: 0.7;
+  }
+  
+  .error-message { /* Style chung cho thông báo lỗi */
+      color: #dc3545;
+      font-size: 0.9em;
+  }

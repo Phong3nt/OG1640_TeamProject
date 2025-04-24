@@ -4,13 +4,11 @@ import {FaReply, FaThumbsUp, FaUser } from "react-icons/fa";
 import axios from 'axios';
 import "./index.css";
 
-// --- Cấu hình Axios Instance ---
 const api = axios.create({
   baseURL: 'http://localhost:5000/api',
 });
 
 api.interceptors.request.use((config) => {
-  // ====> SỬA KEY Ở ĐÂY <====
   const token = localStorage.getItem('token'); // Đổi thành 'token'
   if (token) {
     config.headers.Authorization = `${token}`;
@@ -19,7 +17,6 @@ api.interceptors.request.use((config) => {
 }, (error) => {
   return Promise.reject(error);
 });
-// --- Kết thúc cấu hình Axios Instance ---
 
 export default function BlogDetail() {
   const { id: blogId } = useParams();

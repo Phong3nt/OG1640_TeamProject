@@ -1,5 +1,6 @@
 const blogService = require('../services/blogService');
 const User = require('../models/User');
+const Blog = require("../models/Blog")
 
 const createBlog = async (req, res) => {
   try {
@@ -49,27 +50,54 @@ const getBlogById = async (req, res) => {
 
 const updateBlog = async (req, res) => {
   try {
-    const blog = await blogService.updateBlog(req.params.id, req.body);
-    if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
+    const blogId = req.params.id;
+    const userId = req.user?.id;
+    const userRole = req.user?.role;
+
+    if (!userId) {
+        return res.status(401).json({ message: 'Yêu cầu xác thực.' });
+    }    if (userRole !== 'staff') {
+       return res.status(403).json({ message: 'Chỉ Staff mới có quyền thực hiện hành động này.' });
     }
-    res.status(200).json(blog);
+    const updatedBlog = await blogService.updateBlog(blogId, req.body);
+    if (!updatedBlog) {
+         return res.status(404).json({ message: 'Blog not found during update process.' });
+    }
+
+    res.status(200).json(updatedBlog);
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Lỗi cập nhật blog (staff):", error);
+    res.status(500).json({ message: 'Lỗi server khi cập nhật blog.', error: error.message });
   }
 };
 
 const deleteBlog = async (req, res) => {
   try {
-    const blog = await blogService.deleteBlog(req.params.id);
-    if (!blog) {
-      return res.status(404).json({ message: 'Blog not found' });
+    const blogId = req.params.id;
+    const userId = req.user?.id;
+    const userRole = req.user?.role;
+
+     if (!userId) {
+        return res.status(401).json({ message: 'Yêu cầu xác thực.' });
     }
-    res.status(200).json({ message: 'Blog deleted' });
+    if (userRole !== 'staff') {
+       return res.status(403).json({ message: 'Chỉ Staff mới có quyền thực hiện hành động này.' });
+    }
+
+    const deletedBlog = await blogService.deleteBlog(blogId);
+    if (!deletedBlog) {
+         return res.status(404).json({ message: 'Blog not found during delete process.' });
+    }
+
+    res.status(200).json({ message: 'Blog deleted successfully' });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Lỗi xóa blog (staff):", error);
+    res.status(500).json({ message: 'Lỗi server khi xóa blog.', error: error.message });
   }
 };
+
 
 module.exports = {
   createBlog,
