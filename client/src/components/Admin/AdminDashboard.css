@@ -108,3 +108,60 @@
   
   .stats-grid > div:nth-child(5n+5) .stat-card { border-left-color: #6f42c1; }
   .stats-grid > div:nth-child(5n+5) .stat-icon { color: #6f42c1; background-color: rgba(111, 66, 193, 0.1); }
+
+
+.charts-area-flex {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 1.5rem;       
+  margin-top: 2rem;
+}
+
+.chart-flex-item {
+  flex: 1; /* Cho phép co giãn bằng nhau */
+
+  flex-basis: calc(50% - 0.75rem);
+  min-width: 300px; /* Chiều rộng tối thiểu */
+
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 1rem 1.5rem;
+  box-sizing: border-box; 
+}
+
+.chart-flex-item .chart-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+.chart-flex-item h2 {
+    text-align: center; /* Hoặc left */
+    margin-bottom: 1rem;
+    font-size: 1.1rem; /* Điều chỉnh nếu cần */
+}
+
+.chart-container p {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #777;
+    font-style: italic;
+    margin: 0; 
+}
+.chart-container p.error-message {
+     color: #dc3545;
+     font-style: normal;
+     font-weight: bold;
+}
+
+
+@media (max-width: 768px) {
+  .charts-area-flex {
+     flex-direction: column; /* Chuyển thành cột */
+      gap: 2rem;
+  }
+  .chart-flex-item {
+     flex-basis: 50%; /* Mỗi chart chiếm 1 hàng */
+  }
+}

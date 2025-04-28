@@ -14,7 +14,6 @@ const restrictTo = (...roles) => {
 };
 
 
-
 router.get(
     '/dashboard',
     requireSignIn,                     
@@ -22,5 +21,11 @@ router.get(
     statsController.getDashboardStats  
 );
 
+router.get(
+  '/tasks-per-tutor',
+  requireSignIn,                
+  restrictTo('staff', 'admin'), 
+  statsController.getTasksPerTutor 
+);
 
 module.exports = router;

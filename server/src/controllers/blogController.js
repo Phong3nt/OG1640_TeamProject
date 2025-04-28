@@ -7,7 +7,7 @@ const createBlog = async (req, res) => {
   try {
     const { title, description, coverImage } = req.body;
 
-    const authorId = req.user?.id; // Lấy ID từ user đã xác thực qua token
+    const authorId = req.user?.id; 
 
     if (!authorId) {
         console.error("Lỗi nghiêm trọng: req.user.id không tồn tại trong createBlog dù đã qua requireSignIn.");
@@ -21,8 +21,8 @@ const createBlog = async (req, res) => {
     const blogData = {
       title,
       description,
-      coverImage, // Đây là public_id từ Cloudinary
-      author: authorId // <-- Sử dụng ID lấy từ token
+      coverImage, 
+      author: authorId 
     };
 
     console.log('Data being passed to blogService.createBlog:', blogData);
@@ -30,19 +30,18 @@ const createBlog = async (req, res) => {
     const blog = await blogService.createBlog(blogData);
 
      const populatedBlog = await Blog.findById(blog._id)
-                                     .populate('author', 'fullName email'); // Lấy các trường cần thiết
+                                     .populate('author', 'fullName email');
 
-    res.status(201).json(populatedBlog || blog); // Trả về blog đã populate nếu thành công
+    res.status(201).json(populatedBlog || blog); 
 
   } catch (error) {
     console.error("Error creating blog:", error);
     res.status(500).json({ message: error.message || "Lỗi server khi tạo bài viết." });
   }
 };
-// Lấy tất cả blog
 const getBlogs = async (req, res) => {
   try {
-    const blogs = await blogService.getBlogs(); // Sử dụng blogService
+    const blogs = await blogService.getBlogs();
     res.status(200).json(blogs);
   } catch (error) {
     console.error(error);
@@ -50,10 +49,9 @@ const getBlogs = async (req, res) => {
   }
 };
 
-// Lấy blog theo ID
 const getBlogById = async (req, res) => {
   try {
-    const blog = await blogService.getBlogById(req.params.id); // Sử dụng blogService
+    const blog = await blogService.getBlogById(req.params.id); 
 
     if (!blog) return res.status(404).json({ message: "Blog not found" });
 
