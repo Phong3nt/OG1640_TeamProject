@@ -64,16 +64,24 @@ export default function AllocationPage() {
         setUsersLoading(true);
         errorSetter(null);
         try {
-            const response = await api.get(`/users/by-role?role=${role}&limit=1000`);
-            setter(response.data || []);
-            ;
+          const response = await api.get(`/users/by-role?role=${role}&limit=1000`);
+          const data = response.data;
+          if (Array.isArray(data)) {
+            setter(data);
+          } else if (Array.isArray(data.users)) {
+            // Giả sử API trả về { users: [] }
+            setter(data.users);
+          } else {
+            console.error("Unexpected response data:", data);
+            setter([]);
+          }
         } catch (err) {
-            console.error(`Failed to fetch ${role}s:`, err);
-            errorSetter(`Could not load ${role} list.`);
+          console.error(`Failed to fetch ${role}s:`, err);
+          errorSetter(`Could not load ${role} list.`);
         } finally {
-            setUsersLoading(false);
+          setUsersLoading(false);
         }
-    }, []);
+      }, []);
 
     useEffect(() => {
         fetchUsers('student', setStudents, setUsersError);

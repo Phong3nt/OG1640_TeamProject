@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./PostList.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import BlogCard from "../../../../../components/BlogCard/blogCard";
 
@@ -29,8 +29,6 @@ export const PostList = () => {
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [currentUserInfo, setCurrentUserInfo] = useState({ id: null, fullName: "" }); // Lưu cả id và tên
 
   const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
@@ -65,9 +63,16 @@ export const PostList = () => {
 
   return (
     <section className="post-list-section">
-      <div className="post-list">
+      {/* === Phần hiển thị danh sách BlogCard === */}
+      <div className="flex-container blog-cards-container">
+        {blogs.length === 0 && !isLoading && (
+            <p>No blog posts found.</p> // Hiển thị khi không có bài viết
+        )}
         {blogs.map((blog) => (
-          <BlogCard blog={blog} />
+          // Link bao ngoài BlogCard
+          <Link to={`/blog/${blog._id}`} key={blog._id} className="blog-card-link">
+            <BlogCard blog={blog} />
+          </Link>
         ))}
       </div>
 
