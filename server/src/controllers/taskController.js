@@ -1,8 +1,7 @@
 const Task = require("../models/Task");
 const Allocation = require("../models/TutorAllocation");
-const mongoose = require("mongoose");
 
-// Tạo task (chỉ tutor)
+// ✅ Tạo task (chỉ tutor)
 exports.createTask = async (req, res) => {
   const { studentId, title, description } = req.body;
   const tutorId = req.user.id;
@@ -36,20 +35,25 @@ exports.createTask = async (req, res) => {
   }
 };
 
-// Lấy danh sách task theo role
+// ✅ Lấy danh sách task theo role
 exports.getTasks = async (req, res) => {
   const userId = req.user.id;
   const role = req.user.role;
 
   try {
-    let tasks;
+    let tasksQuery;
     if (role === "tutor") {
-      tasks = await Task.find({ tutorId: userId });
+      tasksQuery = { tutorId: userId };
     } else if (role === "student") {
-      tasks = await Task.find({ studentId: userId });
+      tasksQuery = { studentId: userId };
     } else {
       return res.status(403).json({ message: "Không có quyền truy cập." });
     }
+
+    const tasks = await Task.find(tasksQuery)
+      .populate("studentId", "fullName email")
+      .populate("tutorId", "fullName email")
+      .lean();
 
     res.status(200).json(tasks);
   } catch (err) {
@@ -58,7 +62,7 @@ exports.getTasks = async (req, res) => {
   }
 };
 
-// Nộp bài (chỉ student)
+// ✅ Nộp bài (chỉ student)
 exports.submitTask = async (req, res) => {
   const studentId = req.user.id;
   const { taskId } = req.params;
@@ -70,6 +74,9 @@ exports.submitTask = async (req, res) => {
     }
 
     const submissionPath = req.file ? "/uploads/tasks/" + req.file.filename : "";
+    if (!submissionPath) {
+      return res.status(400).json({ message: "Không có file nộp." });
+    }
 
     task.submission = {
       filePath: submissionPath,
@@ -77,16 +84,17 @@ exports.submitTask = async (req, res) => {
     };
 
     await task.save();
-    res.status(200).json(task);
+    res.status(200).json({ message: "Nộp bài thành công.", task });
   } catch (err) {
     console.error("Lỗi nộp bài:", err);
     res.status(500).json({ message: "Lỗi server khi nộp bài." });
   }
 };
 
-// Bình luận (tutor và student)
+// ✅ Bình luận (tutor và student)
 exports.addComment = async (req, res) => {
   const userId = req.user.id;
+  const userRole = req.user.role; // 👈 Lấy role từ token
   const { taskId } = req.params;
   const { text } = req.body;
 
@@ -98,6 +106,7 @@ exports.addComment = async (req, res) => {
 
     task.comments.push({
       userId,
+      userRole, // 👈 Ghi rõ role ở mỗi comment
       text,
       createdAt: new Date(),
     });
@@ -110,17 +119,18 @@ exports.addComment = async (req, res) => {
   }
 };
 
-// ✅ Lấy danh sách học sinh được phân bổ cho tutor hiện tại
+// ✅ Lấy danh sách học sinh được phân bổ cho tutor
 exports.getAllocatedStudents = async (req, res) => {
   const tutorId = req.user.id;
   try {
-    const allocations = await Allocation.find({ tutor: tutorId, status: 'active' })
-      .populate('student', 'fullName email');
+    const allocations = await Allocation.find({ tutor: tutorId, status: "active" })
+      .populate("student", "fullName email");
 
-    const students = allocations.map(a => a.student);
+    const students = allocations.map((a) => a.student);
     res.status(200).json({ students });
   } catch (err) {
     console.error("Lỗi lấy danh sách học sinh:", err);
     res.status(500).json({ message: "Lỗi server khi lấy danh sách học sinh." });
   }
 };
+  

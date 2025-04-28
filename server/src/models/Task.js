@@ -20,14 +20,16 @@ const taskSchema = new mongoose.Schema(
       type: String,
     },
     filePath: {
-      type: String, // Đường dẫn bài tập từ tutor
+      type: String, // File bài tập do tutor upload
     },
-    answerFilePath: {
-      type: String, // File học sinh nộp
+    submission: {  // ✅ Học sinh nộp bài
+      filePath: { type: String },
+      submittedAt: { type: Date }
     },
     comments: [
       {
         userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        userRole: { type: String, enum: ["student", "tutor"], required: true }, // 👈 Thêm dòng này
         text: String,
         createdAt: { type: Date, default: Date.now },
       },

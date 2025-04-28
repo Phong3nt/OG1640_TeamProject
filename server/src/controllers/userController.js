@@ -203,3 +203,17 @@ exports.deleteUser = async (req, res) => {
   }
 };
 
+exports.getUsersByRole = async (req, res) => {
+  try {
+    const { role, limit } = req.query;
+    if (!role) {
+      return res.status(400).json({ message: 'Role parameter is required' });
+    }
+
+    const users = await UserService.getUsersByRole(role, limit);
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
