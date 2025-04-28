@@ -26,10 +26,6 @@ export const TutorHomePage = () => {
         <FileList />
       </section>
 
-      <section>
-        <h2>List Schedule</h2>
-        {/* <ScheduleList /> */}
-      </section>
     </main>
   );
 };

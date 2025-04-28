@@ -8,16 +8,16 @@ const bodyParser = require("body-parser");
 const connectDB = require("./src/config/db");
 const userRoutes = require("./src/routes/userRoutes");
 const blogRoutes = require("./src/routes/blogRoutes");
-const commentRoutes = require('./src/routes/commentRoutes');
-const allocationRoutes = require('./src/routes/tutorAllocationRoutes');
+const commentRoutes = require("./src/routes/commentRoutes");
+const allocationRoutes = require("./src/routes/tutorAllocationRoutes");
 const taskRoutes = require("./src/routes/taskRoutes");
-const meRoutes = require('./src/routes/meRoutes'); 
-const statsRoutes = require('./src/routes/statsRoutes');
+const meRoutes = require("./src/routes/meRoutes");
+const statsRoutes = require("./src/routes/statsRoutes");
 const cookieParser = require("cookie-parser");
-
+const meetingRoutes = require("./src/routes/meetingRoutes");
 
 // const messageRoutes = require('./src/routes/messageRoutes');
-// const meetingRoutes = require('./src/routes/meetingRoutes');
+
 // const fileRoutes = require('./src/routes/fileRoutes');
 // const postRoutes = require('./src/routes/postRoutes');
 // const commentRoutes = require('./src/routes/commentRoutes');
@@ -29,10 +29,12 @@ dotenv.config();
 const app = express();
 connectDB();
 // ✅ Fix CORS for credentials
-app.use(cors({
-    origin: 'http://localhost:3000',   // CHÍNH XÁC frontend origin
-    credentials: true                  // Cho phép gửi cookie/token
-  }));
+app.use(
+  cors({
+    origin: "http://localhost:3000", // CHÍNH XÁC frontend origin
+    credentials: true, // Cho phép gửi cookie/token
+  })
+);
 // Cấu hình middleware
 app.use(morgan("dev"));
 app.use(express.json());
@@ -43,20 +45,20 @@ app.use(cookieParser()); // ủa có profile route hả có chiều m fix có m�
 
 app.use("/api/users", userRoutes);
 // app.use('/api/messages', messageRoutes);
-// app.use('/api/meetings', meetingRoutes);
+app.use("/api/meetings", meetingRoutes);
 // app.use('/api/files', fileRoutes);
 app.use("/api", blogRoutes);
-app.use('/api/allocations', allocationRoutes);
+app.use("/api/allocations", allocationRoutes);
 app.use("/api/tasks", taskRoutes); // <-- đăng ký routes cho tasks
-app.use('/api/comments', commentRoutes);
+app.use("/api/comments", commentRoutes);
 // app.use('/api/posts', postRoutes);
 // app.use('/api/recordings', recordingRoutes);
 // app.use('/api/reports', reportRoutes);
 // app.use('/api/dashboard', dashboardRoutes);
 // app.use('/api/conversation', conversationRoutes);
- app.use('/api/me', meRoutes);
- app.use("/uploads", express.static("uploads"));
- app.use('/api/stats', statsRoutes);
+app.use("/api/me", meRoutes);
+app.use("/uploads", express.static("uploads"));
+app.use("/api/stats", statsRoutes);
 // Chạy server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

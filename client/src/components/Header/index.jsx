@@ -71,12 +71,6 @@ export const Header = () => {
           <li>
             <Link to="/tasks">Tasks</Link>
           </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/contact">Contact</Link>
-          </li>
           <li className="dark-mode-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
             {isDarkMode ? <FaSun size={24} /> : <FaMoon size={24} />}
           </li>

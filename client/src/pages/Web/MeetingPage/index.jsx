@@ -2,26 +2,25 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CreateMeetingForm from "./components/CreateMeetingForm";
 import MeetingDetailModal from "./components/MeetingDetailModal";
-import RescheduleModal from "./components/RescheduleModal";
 import CalendarView from "./components/CalendarView";
 import MeetingLogsModal from "./components/MeetingLogsModal";
 import "./MeetingPage.css";
+import api from "../../../utils/axios";
+
+const currentUser = JSON.parse(localStorage.getItem("user"));
 
 const MeetingPage = () => {
   const [meetings, setMeetings] = useState([]);
   const [selectedMeeting, setSelectedMeeting] = useState(null);
-  const [rescheduleMeeting, setRescheduleMeeting] = useState(null);
   const [logs, setLogs] = useState({});
   const [logMeetingId, setLogMeetingId] = useState(null);
-  const [currentRole, setCurrentRole] = useState("tutor");
-
-  const currentUser = JSON.parse(localStorage.getItem("user")); // hoặc dùng context
-
+  const [allocatedStudents, setAllocatedStudents] = useState([]);
+  
   // Fetch all meetings from API
   useEffect(() => {
     const fetchMeetings = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/meeting");
+        const res = await axios.get("http://localhost:5000/api/meetings");
         setMeetings(res.data.meetings || []);
       } catch (err) {
         console.error("Error fetching meetings:", err);
@@ -31,83 +30,58 @@ const MeetingPage = () => {
     fetchMeetings();
   }, []);
 
+  // Fetch allocated students for the current tutor
+  useEffect(() => {
+    const fetchAllocatedStudents = async () => {
+      try {
+        if (currentUser.role === "tutor") {
+          const res = await axios.get(
+            `http://localhost:5000/api/me/allocations/tutor/${currentUser.id}` // Use currentUser.id
+          );
+          setAllocatedStudents(res.data.students || []);
+        }
+      } catch (err) {
+        console.error("Error fetching allocated students:", err);
+      }
+    };
+
+    fetchAllocatedStudents();
+  }, [currentUser]);
+
   const filteredMeetings = meetings.filter((m) =>
     currentUser.role === "tutor"
-      ? m.senderId === currentUser.userId
-      : m.receiverId === currentUser.userId
+      ? m.host._id === currentUser.id // Use `host._id` for tutors
+      : m.participants.some((participant) => participant._id === currentUser.id) // Use `participants` for students
   );
 
   const handleCreate = async (newMeeting) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/meeting", {
+      const res = await api.post("/meetings", {
         ...newMeeting,
-        senderId: currentUser.userId,
-      }, {
-        headers: {
-          Authorization: "Bearer yourTokenHere", // thêm nếu có auth
-        },
+        senderId: currentUser.id, // Use currentUser.id
+        participants: allocatedStudents.map((student) => student._id),
       });
-      setMeetings([...meetings, res.data.meeting]);
+      setMeetings((prevMeetings) => [...prevMeetings, res.data.meeting]);
+      window.location.reload();
     } catch (error) {
       console.error("Error creating meeting:", error);
     }
   };
 
-  const handleUpdateSchedule = async (updatedMeeting) => {
-    try {
-      await axios.put(`http://localhost:5000/api/meeting/${updatedMeeting.meetingId}`, updatedMeeting);
-      setMeetings((prev) =>
-        prev.map((m) => (m.meetingId === updatedMeeting.meetingId ? updatedMeeting : m))
-      );
-      setRescheduleMeeting(null);
-      setSelectedMeeting(null);
-    } catch (err) {
-      console.error("Error updating schedule:", err);
-    }
-  };
-
-  const handleUpdateMeeting = async (updatedMeeting) => {
-    try {
-      await axios.put(`http://localhost:5000/api/meeting/${updatedMeeting.meetingId}`, updatedMeeting);
-      setMeetings((prev) =>
-        prev.map((m) => (m.meetingId === updatedMeeting.meetingId ? updatedMeeting : m))
-      );
-
-      const meetingId = updatedMeeting.meetingId;
-      const newLog = {
-        time: new Date().toLocaleString(),
-        action: `Tutor updated meeting ${meetingId}`,
-      };
-
-      setLogs((prevLogs) => ({
-        ...prevLogs,
-        [meetingId]: [newLog, ...(prevLogs[meetingId] || [])],
-      }));
-    } catch (err) {
-      console.error("Error updating meeting:", err);
-    }
-  };
-
   const handleDeleteMeeting = async (meetingId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/meeting/${meetingId}`);
-      setMeetings((prev) => prev.filter((m) => m.meetingId !== meetingId));
+      await api.delete(`/meetings/${meetingId}`);
+      setMeetings((prevMeetings) =>
+        prevMeetings.filter((meeting) => meeting._id !== meetingId)
+      );
       setSelectedMeeting(null);
-    } catch (err) {
-      console.error("Error deleting meeting:", err);
+    } catch (error) {
+      console.error("Error deleting meeting:", error);
     }
   };
 
   return (
     <div className="meeting-page">
-      <div style={{ textAlign: "right", marginBottom: "10px" }}>
-        <label><strong>Switch User:</strong></label>
-        <select value={currentRole} onChange={(e) => setCurrentRole(e.target.value)}>
-          <option value="tutor">Tutor</option>
-          <option value="student">Student</option>
-        </select>
-      </div>
-
       <h1 className="meeting-title">📅 My Meetings</h1>
 
       {currentUser.role === "tutor" && (
@@ -125,23 +99,14 @@ const MeetingPage = () => {
       {selectedMeeting && (
         <MeetingDetailModal
           meeting={selectedMeeting}
-          currentUser={currentUser}
+          currentUserRole={currentUser.role}
           onClose={() => setSelectedMeeting(null)}
-          onUpdate={handleUpdateMeeting}
           onDelete={handleDeleteMeeting}
           logs={logs}
           onViewLogs={(meetingId) => {
             setSelectedMeeting(null);
             setLogMeetingId(meetingId);
           }}
-        />
-      )}
-
-      {rescheduleMeeting && (
-        <RescheduleModal
-          meeting={rescheduleMeeting}
-          onCancel={() => setRescheduleMeeting(null)}
-          onUpdate={handleUpdateSchedule}
         />
       )}
 

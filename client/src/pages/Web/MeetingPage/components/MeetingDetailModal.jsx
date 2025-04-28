@@ -1,85 +1,52 @@
-import React, { useState } from "react";
-import "../MeetingPage.css";
+import React from "react";
+import "../MeetingPage.css"; // Import the CSS file for styling
 
-const MeetingDetailModal = ({ meeting, currentUser, onClose, onUpdate, onDelete, onViewLogs }) => {
-    const [zoomId, setZoomId] = useState(meeting.zoomId || "");
-    const [recordingURL, setRecordingURL] = useState(meeting.recordingURL || "");
-
-    const isTutor = currentUser.userId === meeting.senderId;
-
-    const handleSave = () => {
-        const updated = {
-            ...meeting,
-            zoomId,
-            recordingURL,
-            updatedAt: new Date().toISOString(),
-        };
-        onUpdate(updated);
-        onClose();
-    };
-
-    const handleDelete = () => {
-        if (window.confirm("Are you sure you want to delete this meeting?")) {
-            onDelete(meeting.meetingId);
-        }
-    };
-
-    return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <h3>Meeting Details</h3>
-
-                <p><strong>Meeting ID:</strong> {meeting.meetingId}</p>
-                <p><strong>Sender:</strong> {meeting.senderName}</p>
-                <p><strong>Receiver:</strong> {meeting.receiverName}</p>
-                <p><strong>Schedule:</strong> {new Date(meeting.scheduleTime).toLocaleString()}</p>
-
-                {isTutor ? (
-                    <>
-                        <div className="form-group">
-                            <label>Zoom ID</label>
-                            <input
-                                type="text"
-                                value={zoomId}
-                                onChange={(e) => setZoomId(e.target.value)}
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Recording Link</label>
-                            <input
-                                type="url"
-                                value={recordingURL}
-                                onChange={(e) => setRecordingURL(e.target.value)}
-                            />
-                        </div>
-
-                        <div className="button-group">
-                            <button className="button button-primary" onClick={handleSave}>Save</button>
-                            <button className="button button-outline" onClick={() => onViewLogs(meeting.meetingId)}>View Logs</button>
-                            <button className="button button-outline" onClick={handleDelete}>Delete</button>
-                        </div>
-
-                        <div className="button-group" style={{ marginTop: 10 }}>
-                            <button className="button button-outline" onClick={onClose}>Cancel</button>
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <p><strong>Zoom ID:</strong> {zoomId || "Not available"}</p>
-                        <p><strong>Recording:</strong>{" "}
-                            {recordingURL
-                                ? <a href={recordingURL} target="_blank" rel="noreferrer">{recordingURL}</a>
-                                : "Not available"}
-                        </p>
-                        <div className="button-group">
-                            <button className="button button-outline" onClick={onClose}>Close</button>
-                        </div>
-                    </>
-                )}
-            </div>
+const MeetingDetailModal = ({
+  meeting,
+  currentUserRole,
+  onClose,
+  onJoin,
+  onDelete,
+}) => {
+  return (
+    <div className="modal-overlay">
+      <div className="modal-container">
+        <h2 className="modal-title">{meeting.title}</h2>
+        <div className="modal-content">
+          <p>
+            <strong>Date:</strong> {new Date(meeting.date).toLocaleString()}
+          </p>
+          <p>
+            <strong>Duration:</strong> {meeting.duration} minutes
+          </p>
+          <p>
+            <strong>Participants:</strong>
+          </p>
+          <ul>
+            {meeting.participants.map((participant) => (
+              <li key={participant._id}>{participant.fullName}</li>
+            ))}
+          </ul>
         </div>
-    );
+        <div className="modal-actions">
+          <button className="btn btn-join" onClick={() => onJoin(meeting)}>
+            Join
+          </button>
+          {currentUserRole !== "student" && (
+            <button
+              className="btn btn-delete"
+              onClick={() => onDelete(meeting._id)}
+            >
+              Delete
+            </button>
+          )}
+          <button className="btn btn-close" onClick={onClose}>
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default MeetingDetailModal;
