@@ -3,7 +3,6 @@ const {
   scheduleMeeting, 
   getAllMeetings, 
   getMeetingById, 
-  updateMeeting, 
   deleteMeeting 
 } = require('../controllers/meetingController');
 const { requireSignIn } = require('../middlewares/auth');
@@ -18,9 +17,6 @@ router.get('/', requireSignIn, getAllMeetings);
 
 // Route to get a specific meeting by ID
 router.get('/:meetingId', requireSignIn, getMeetingById);
-
-// Route to update a meeting by ID
-router.put('/:meetingId', requireSignIn, updateMeeting);
 
 // Route to delete a meeting by ID
 router.delete('/:meetingId', requireSignIn, deleteMeeting);

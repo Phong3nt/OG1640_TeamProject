@@ -1,30 +1,30 @@
 import React, { useState } from "react";
 
 const CreateMeetingForm = ({ onCreate }) => {
-  const [receiverId, setReceiverId] = useState("");
-  const [scheduleTime, setScheduleTime] = useState("");
-  const [zoomId, setZoomId] = useState("");
+  const [formData, setFormData] = useState({
+    title: "",
+    date: "",
+    duration: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!receiverId || !scheduleTime || !zoomId) {
-      alert("Please fill in all fields.");
-      return;
-    }
+    onCreate({
+      ...formData,
+    });
 
-    const newMeeting = {
-      receiverId,
-      scheduleTime,
-      zoomId,
-    };
-
-    onCreate(newMeeting);
-
-    // Clear form
-    setReceiverId("");
-    setScheduleTime("");
-    setZoomId("");
+    // Reset the form
+    setFormData({
+      title: "",
+      date: "",
+      duration: "",
+    });
   };
 
   return (
@@ -32,20 +32,25 @@ const CreateMeetingForm = ({ onCreate }) => {
       <div className="create-meeting-inputs">
         <input
           type="text"
-          placeholder="Receiver ID"
-          value={receiverId}
-          onChange={(e) => setReceiverId(e.target.value)}
+          placeholder="Meeting Title"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
         />
         <input
           type="datetime-local"
-          value={scheduleTime}
-          onChange={(e) => setScheduleTime(e.target.value)}
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+          required
         />
         <input
           type="text"
-          placeholder="Zoom ID"
-          value={zoomId}
-          onChange={(e) => setZoomId(e.target.value)}
+          placeholder="Meeting Duration (optional)"
+          name="duration"
+          value={formData.duration}
+          onChange={handleChange}
         />
       </div>
       <button type="submit">Create Meeting</button>

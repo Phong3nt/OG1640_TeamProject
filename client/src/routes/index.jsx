@@ -26,6 +26,7 @@ import UserManagement from "../components/Admin/UserManagement";
 import BlogManagement from "../components/Admin/BlogManagement"
 import StaffDashboard from "../components/Admin/AdminDashboard"
 import AdminDashboard from "../components/Admin/AdminDashboard";
+import MeetingManagement from "../components/Admin/MeetingManagement.tsx";
 
 // Protected route wrapper
 const ProtectedRoute = ({ children, role }) => {
@@ -99,6 +100,7 @@ export const Router = () => {
         <Route path="blogs" element={<BlogManagement />} />
         <Route path="allocations" element={<AllocationPage />} />
         <Route path="analysis" element={<AdminDashboard />} />
+        <Route path="meetings" element={<MeetingManagement />} /> 
         {/* Add more staff routes here if needed */}
       </Route>
 
