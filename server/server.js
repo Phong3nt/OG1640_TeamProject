@@ -12,6 +12,8 @@ const blogRoutes = require("./src/routes/blogRoutes");
 const commentRoutes = require('./src/routes/commentRoutes');
 const allocationRoutes = require('./src/routes/tutorAllocationRoutes');
 const taskRoutes = require("./src/routes/taskRoutes");
+const meRoutes = require('./src/routes/meRoutes'); 
+const statsRoutes = require('./src/routes/statsRoutes');
 const cookieParser = require("cookie-parser");
 
 
@@ -46,18 +48,19 @@ app.use("/api/users", userRoutes);
 // app.use('/api/meetings', meetingRoutes);
 // app.use('/api/files', fileRoutes);
 app.use("/api", blogRoutes);
-app.use('/api', commentRoutes);
 app.use('/api/allocations', allocationRoutes);
 app.use("/api/tasks", taskRoutes); // <-- đăng ký routes cho tasks
-
+app.use('/api/comments', commentRoutes);
 // app.use('/api/posts', postRoutes);
 // app.use('/api/recordings', recordingRoutes);
 // app.use('/api/reports', reportRoutes);
 // app.use('/api/dashboard', dashboardRoutes);
 // app.use('/api/conversation', conversationRoutes);
  app.use("/api/profile", profileRoutes);
+ app.use('/api/me', meRoutes);
  app.use("/uploads", express.static("uploads"));
- app.use("/api", profileRoutes); // ✅ profile routes
+ app.use("/api", profileRoutes); 
+ app.use('/api/stats', statsRoutes);
 // Chạy server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

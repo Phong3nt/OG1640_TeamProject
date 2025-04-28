@@ -145,6 +145,27 @@ exports.getUsers = async (req, res) => {
   }
 };
 
+
+
+exports.getUsersByRole = async (req, res) => {
+  try {
+    const { role, limit } = req.query;
+
+    if (!role) {
+      return res.status(400).json({ message: 'Vui lòng cung cấp vai trò (role).' });
+    }
+    const queryLimit = parseInt(limit) || 10;
+    const users = await User.find({ role: role })
+      .limit(queryLimit); 
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Lỗi khi lấy người dùng theo vai trò:", error);
+    res.status(500).json({ message: 'Lỗi server khi lấy người dùng.' });
+  }
+};
+
+
+
 // Get a user by ID
 exports.getUserById = async (req, res) => {
   try {

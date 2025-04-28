@@ -15,10 +15,10 @@ export const TutorHomePage = () => {
     <main className="homepage">
       <h2>Welcome, {user.name} ({user.role})</h2>
 
-      <section>
+      {/* <section>
         <h2>List Students</h2>
         {/* <StudentList /> */}
-      </section>
+      {/* </section> */} 
 
       <section>
         <h2>List Posts</h2>

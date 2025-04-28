@@ -271,3 +271,10 @@
 #root > main > div > div > div.blog-header > h2{
   color: black
 }
+button.comment-action.delete-button{
+  background-color: white;
+}
+
+.dark-modebutton.comment-action.delete-button{
+  background-color: black;
+}

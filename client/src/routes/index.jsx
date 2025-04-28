@@ -24,6 +24,8 @@ import TasksPage from "../pages/Tasks/TasksPage"; // ✅ Import TasksPage
 // staff Feature Pages
 import UserManagement from "../components/Admin/UserManagement";
 import BlogManagement from "../components/Admin/BlogManagement"
+import StaffDashboard from "../components/Admin/AdminDashboard"
+import AdminDashboard from "../components/Admin/AdminDashboard";
 
 // Protected route wrapper
 const ProtectedRoute = ({ children, role }) => {
@@ -80,7 +82,6 @@ export const Router = () => {
         <Route path="/blog/:id" element={<ProtectedRoute><BlogDetail /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/message" element={<ProtectedRoute><Messenger /></ProtectedRoute>} />
-        <Route path="/allocations" element={<ProtectedRoute allowedRoles={['staff']}><AllocationPage /></ProtectedRoute>} />
         <Route path="/tasks" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} /> {/* ✅ Route mới */}
       </Route>
 
@@ -96,6 +97,8 @@ export const Router = () => {
         <Route index element={<AdminHomePage />} />
         <Route path="users" element={<UserManagement />} />
         <Route path="blogs" element={<BlogManagement />} />
+        <Route path="allocations" element={<AllocationPage />} />
+        <Route path="analysis" element={<AdminDashboard />} />
         {/* Add more staff routes here if needed */}
       </Route>
 

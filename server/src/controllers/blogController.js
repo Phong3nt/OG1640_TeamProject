@@ -2,25 +2,41 @@ const blogService = require('../services/blogService');
 const User = require('../models/User');
 const Blog = require("../models/Blog")
 
+
 const createBlog = async (req, res) => {
   try {
-    // Find the user by name (or any other unique identifier)
-    const user = await User.findOne({ fullName: req.body.author }); // Problem 1: Assuming author name is sent, not ID
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    const { title, description, coverImage } = req.body;
+
+    const authorId = req.user?.id; // Lấy ID từ user đã xác thực qua token
+
+    if (!authorId) {
+        console.error("Lỗi nghiêm trọng: req.user.id không tồn tại trong createBlog dù đã qua requireSignIn.");
+        return res.status(401).json({ message: "Không thể xác định tác giả bài viết." });
     }
 
-    // Create the blog with the user's ObjectId as the author
+     if (!title || !description || !coverImage) {
+         return res.status(400).json({ message: "Vui lòng cung cấp đủ Title, Description và Cover Image (public_id)." });
+     }
+
     const blogData = {
-      ...req.body, // Includes title, description (if sent), coverImage, etc.
-      author: user._id, // Overwrites req.body.author with the user's ID
+      title,
+      description,
+      coverImage, // Đây là public_id từ Cloudinary
+      author: authorId // <-- Sử dụng ID lấy từ token
     };
-    console.log('Creating Blog - Request Body:', req.body); // User needs to add this line
-    console.log('Data passed to service:', blogData); // Maybe add this too
-    const blog = await blogService.createBlog(blogData); // Passes combined data
-    res.status(201).json(blog);
+
+    console.log('Data being passed to blogService.createBlog:', blogData);
+
+    const blog = await blogService.createBlog(blogData);
+
+     const populatedBlog = await Blog.findById(blog._id)
+                                     .populate('author', 'fullName email'); // Lấy các trường cần thiết
+
+    res.status(201).json(populatedBlog || blog); // Trả về blog đã populate nếu thành công
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error creating blog:", error);
+    res.status(500).json({ message: error.message || "Lỗi server khi tạo bài viết." });
   }
 };
 // Lấy tất cả blog
