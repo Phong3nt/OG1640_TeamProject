@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from "react";
-import api from "../../../utils/axios"; // ✅ dùng axios instance
+import React, { useState, useEffect } from "react";
+import api from "../../../utils/axios";
 
-const TaskForm = ({ currentUser, onTaskCreated }) => {
+const TaskForm = ({ onTaskCreated }) => {
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
-    const fetchAllocatedStudents = async () => {
+    const fetchStudents = async () => {
       try {
         const res = await api.get("/tasks/allocated-students");
         setStudents(res.data.students || []);
       } catch (err) {
-        console.error("Lỗi khi lấy danh sách học sinh:", err);
+        console.error("Failed to fetch students:", err);
       }
     };
-
-    if (currentUser?.role?.toLowerCase() === "tutor") {
-      fetchAllocatedStudents();
-    }
-  }, [currentUser]);
+    fetchStudents();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,61 +31,72 @@ const TaskForm = ({ currentUser, onTaskCreated }) => {
       if (file) formData.append("file", file);
 
       await api.post("/tasks/create", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       setTitle("");
       setDescription("");
-      setFile(null);
       setSelectedStudent("");
+      setFile(null);
+      setIsFormOpen(false); // Đóng form sau khi tạo task thành công
       onTaskCreated();
+      alert("Task created successfully!");
     } catch (err) {
-      console.error("Lỗi khi tạo task:", err);
-      alert("Tạo task thất bại.");
+      console.error("Failed to create task:", err);
+      alert("Error creating task.");
     }
   };
 
   return (
-    <form className="task-form" onSubmit={handleSubmit}>
-      <h3>Tạo bài tập mới</h3>
+    <div className="task-form-container">
+      {/* Nút Create */}
+      {!isFormOpen ? (
+        <button className="create-task-button" onClick={() => setIsFormOpen(true)}>
+          + Create Task
+        </button>
+      ) : (
+        <form className="task-form" onSubmit={handleSubmit}>
+          <h3>Create Task</h3>
 
-      <label>Chọn học sinh</label>
-      <select
-        value={selectedStudent}
-        onChange={(e) => setSelectedStudent(e.target.value)}
-        required
-      >
-        <option value="">-- Chọn học sinh --</option>
-        {students.map((student) => (
-          <option key={student._id} value={student._id}>
-            {student.fullName} ({student.email})
-          </option>
-        ))}
-      </select>
+          <select value={selectedStudent} onChange={(e) => setSelectedStudent(e.target.value)} required>
+            <option value="">-- Select Student --</option>
+            {students.map((s) => (
+              <option key={s._id} value={s._id}>
+                {s.fullName} ({s.email})
+              </option>
+            ))}
+          </select>
 
-      <label>Tiêu đề</label>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-      />
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
 
-      <label>Mô tả</label>
-      <textarea
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        rows="3"
-        required
-      />
+          <textarea
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
 
-      <label>Tệp đính kèm (nếu có)</label>
-      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+          <input type="file" onChange={(e) => setFile(e.target.files[0])} />
 
-      <button type="submit">Tạo bài tập</button>
-    </form>
+          <div className="task-form-buttons">
+            <button type="submit">Submit</button>
+            <button
+              type="button"
+              className="cancel-button"
+              onClick={() => setIsFormOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
+    </div>
   );
 };
 

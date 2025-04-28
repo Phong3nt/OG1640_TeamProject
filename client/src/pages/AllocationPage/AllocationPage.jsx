@@ -267,7 +267,6 @@ export default function AllocationPage() {
                                 </tr>
                             ) : (
                                 allocations.map(allocation => {
-                                    console.log("Rendering Allocation Object:", JSON.stringify(allocation, null, 2));
                                     const endDate = calculateEndDate(allocation.allocationDate, allocation.durationMonths);
                                     const isOverdue = endDate && new Date() > endDate;
                                     const displayStatus = allocation.status === 'active' && isOverdue ? 'overdue' : (allocation.status === 'active' ? 'active' : 'inactive');

@@ -7,7 +7,6 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const connectDB = require("./src/config/db");
 const userRoutes = require("./src/routes/userRoutes");
-const profileRoutes = require("./src/routes/profileRoutes");
 const blogRoutes = require("./src/routes/blogRoutes");
 const commentRoutes = require('./src/routes/commentRoutes');
 const allocationRoutes = require('./src/routes/tutorAllocationRoutes');
@@ -40,7 +39,6 @@ app.use(express.json());
 //app.use(express.static("public"));
 //app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
-app.use("/api", profileRoutes); // ✅ profile routes
 app.use(cookieParser()); // ủa có profile route hả có chiều m fix có mà quên merge vharddaau t dùng user chơ mấy nhở vl t pull code xuống thấy
 
 app.use("/api/users", userRoutes);
@@ -56,10 +54,8 @@ app.use('/api/comments', commentRoutes);
 // app.use('/api/reports', reportRoutes);
 // app.use('/api/dashboard', dashboardRoutes);
 // app.use('/api/conversation', conversationRoutes);
- app.use("/api/profile", profileRoutes);
  app.use('/api/me', meRoutes);
  app.use("/uploads", express.static("uploads"));
- app.use("/api", profileRoutes); 
  app.use('/api/stats', statsRoutes);
 // Chạy server
 const PORT = process.env.PORT || 5000;

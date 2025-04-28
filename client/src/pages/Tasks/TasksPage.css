@@ -1,128 +1,74 @@
 .tasks-page {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
 }
 
-.tasks-page h2 {
-    text-align: center;
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 30px;
-    color: #333;
+.task-item {
+  background: #fff;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Task Form */
-.task-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-bottom: 40px;
+.task-form,
+.comment-section {
+  margin-top: 1.5rem;
 }
 
-.task-form textarea {
-    resize: vertical;
-    min-height: 80px;
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+.task-form select,
+.task-form input[type="text"],
+.task-form textarea,
+.comment-section input[type="text"] {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
 .task-form input[type="file"] {
-    padding: 6px;
+  margin: 0.5rem 0;
 }
 
-.task-form button {
-    align-self: flex-start;
-    padding: 10px 20px;
-    background-color: #4d73ff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background 0.2s ease;
+.task-form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
 }
 
-.task-form button:hover {
-    background-color: #2c5cf5;
+.task-form button,
+.comment-section button,
+.create-task-button {
+  flex: 1;
+  padding: 0.6rem;
+  background-color: #5b8bd1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-/* Task List */
-.task-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.task-form button:hover,
+.comment-section button:hover,
+.create-task-button:hover {
+  background-color: #4a76b3;
 }
 
-/* Task Card */
-.task-card {
-    border: 1px solid #eee;
-    border-left: 5px solid #4d73ff;
-    padding: 16px 20px;
-    border-radius: 10px;
-    background-color: #f9f9ff;
+.cancel-button {
+  background-color: #ccc;
+  color: #333;
 }
 
-.task-card h4 {
-    margin-bottom: 8px;
-    color: #222;
+.cancel-button:hover {
+  background-color: #aaa;
 }
 
-.task-card p {
-    margin-bottom: 6px;
-    font-size: 14px;
-    color: #444;
-}
-
-.task-card a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.task-card a:hover {
-    text-decoration: underline;
-}
-
-/* Comments */
-.comment-section {
-    margin-top: 12px;
-    padding-left: 12px;
-    border-left: 2px solid #ccc;
-}
-
-.comment {
-    margin-bottom: 6px;
-    font-size: 13px;
-    color: #333;
-}
-
-/* Student File Upload */
-.submit-section {
-    margin-top: 12px;
-}
-
-.submit-section form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.submit-section button {
-    align-self: flex-start;
-    padding: 6px 14px;
-    font-size: 14px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.submit-section button:hover {
-    background-color: #1e7e34;
+.create-task-button {
+  width: 200px;
+  margin-bottom: 1rem;
 }

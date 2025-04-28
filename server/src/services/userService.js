@@ -1,4 +1,4 @@
-    // services/userService.js
+// services/userService.js
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -51,28 +51,38 @@ exports.resetPassword = async (token, newPassword) => {
 
 // Create a new user
 exports.createUser = async (userData) => {
-    const userExists = await User.findOne({ email: userData.email });
-    if (userExists) throw new Error('User already exists');
-    return await User.create(userData);
-  };
-  
-  // Get all users
-  exports.getUsers = async () => {
-    return await User.find();
-  };
-  
-  // Get a user by ID
-  exports.getUserById = async (id) => {
-    return await User.findById(id);
-  };
-  
-  // Update a user
-  exports.updateUser = async (id, userData) => {
-    return await User.findByIdAndUpdate(id, userData, { new: true, runValidators: true });
-  };
-  
-  // Delete a user
-  exports.deleteUser = async (id) => {
-    return await User.findByIdAndDelete(id);
-  };
-  
+  const userExists = await User.findOne({ email: userData.email });
+  if (userExists) throw new Error('User already exists');
+  return await User.create(userData);
+};
+
+// Get all users
+exports.getUsers = async () => {
+  return await User.find();
+};
+
+// Get a user by ID
+exports.getUserById = async (id) => {
+  return await User.findById(id);
+};
+
+// Update a user
+exports.updateUser = async (id, userData) => {
+  return await User.findByIdAndUpdate(id, userData, { new: true, runValidators: true });
+};
+
+// Delete a user
+exports.deleteUser = async (id) => {
+  return await User.findByIdAndDelete(id);
+};
+
+exports.getUsersByRole = async (role, limit = 0) => {
+  if (!role) {
+    throw new Error('Role is required');
+  }
+  const query = User.find({ role: role.toLowerCase() }).select('-password -confirmationToken');
+  if (limit > 0) {
+    query.limit(Number(limit));
+  }
+  return await query;
+};
