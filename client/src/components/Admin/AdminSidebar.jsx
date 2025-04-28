@@ -27,9 +27,17 @@ const AdminSidebar = () => {
       </div>
 
       <nav className="sidebar-nav">
+        <NavLink to="/dashboard/staff/analysis" className="sidebar-link">
+          <FaUser />
+          <span>Analysis</span>
+        </NavLink>
         <NavLink to="/dashboard/staff/users" className="sidebar-link">
           <FaUser />
           <span>Users</span>
+        </NavLink>
+        <NavLink to="/dashboard/staff/allocations" className="sidebar-link">
+          <FaUser />
+          <span>Allocations</span>
         </NavLink>
         <NavLink to="/dashboard/staff/blogs" className="sidebar-link">
           <FaBoxOpen />
@@ -38,10 +46,6 @@ const AdminSidebar = () => {
         <NavLink to="/dashboard/staff/meetings" className="sidebar-link">
           <FaClipboardList />
           <span>Meetings</span>
-        </NavLink>
-        <NavLink to="/dashboard/staff/messages" className="sidebar-link">
-          <FaEnvelope />
-          <span>Messages</span>
         </NavLink>
       </nav>
 

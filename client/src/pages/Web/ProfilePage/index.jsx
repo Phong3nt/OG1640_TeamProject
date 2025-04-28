@@ -3,6 +3,7 @@ import ProfileInfo from "./components/ProfileInfo";
 import EditProfileForm from "./components/EditProfileForm";
 import ChangePasswordForm from "./components/ChangePasswordForm";
 import AvatarUpload from "./components/AvatarUpload";
+import MyAllocationInfo from "./components/MyAllocations"
 import "./ProfilePage.css";
 import axios from "axios";
 
@@ -65,6 +66,12 @@ const ProfilePage = () => {
                     />
                 )}
             </div>
+            {(user.role === 'student' || user.role === 'tutor') && (
+                 <div className="card allocation-card"> 
+                     <h2>My Assignment</h2>
+                     <MyAllocationInfo currentUser={user} />
+                 </div>
+            )}
         </div>
     );
 };

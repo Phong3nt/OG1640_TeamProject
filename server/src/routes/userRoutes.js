@@ -12,8 +12,10 @@ const {
   getUserById,
   updateUser,
   deleteUser,
+  getUsersByRole
 } = require("../controllers/userController");
 const { requireSignIn } = require("../middlewares/auth");
+const { getMyAllocations } = require('../controllers/tutorAllocationController');
 
 // API Đăng nhập
 router.post("/adminLogin", (req, res) => {
@@ -49,6 +51,10 @@ router.post("/create", createUser);
 // Route for get all user
 router.get("/all", getUsers);
 
+//Route for get user by role
+router.get("/by-role", getUsersByRole);
+
+
 // Route for get user
 router.get("/:id", getUserById);
 
@@ -58,6 +64,9 @@ router.put("/:id", updateUser);
 
 // Route for delete user
 router.delete("/:id", deleteUser);
+
+
+
 
 
 module.exports = router;

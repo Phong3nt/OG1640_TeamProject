@@ -81,33 +81,22 @@ exports.createComment = async (req, res) => {
  * @access Public
  */
 exports.getCommentsByBlog = async (req, res) => {
-    const { blogId } = req.params; 
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
+    const { blogId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(blogId)) {
-        return res.status(400).json({ message: 'ID blog không hợp lệ.' }); // Sửa thông báo
+        return res.status(400).json({ message: 'ID blog không hợp lệ.' });
     }
 
     try {
-        const comments = await Comment.find({ blog: blogId, parentComment: null }) // Sử dụng trường 'blog'
-            .populate('commenter', 'fullName username avatar')
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
+        const comments = await Comment.find({ blog: blogId }) 
+            .populate('commenter', 'fullName username avatar') 
+            .sort({ createdAt: -1 }); 
+        console.log(`getCommentsByBlog for ${blogId} found ${comments.length} total comments.`); 
 
-        const totalComments = await Comment.countDocuments({ blog: blogId, parentComment: null }); // Sử dụng trường 'blog'
-        const totalPages = Math.ceil(totalComments / limit);
+        res.status(200).json({ comments });
 
-        res.status(200).json({
-            comments,
-            currentPage: page,
-            totalPages,
-            totalComments,
-        });
     } catch (error) {
-        console.error("Lỗi lấy bình luận:", error);
+        console.error("Lỗi lấy bình luận (tất cả):", error);
         const errorMessage = process.env.NODE_ENV === 'development' ? error.message : 'Lỗi server khi lấy bình luận.';
         res.status(500).json({ message: errorMessage });
     }
@@ -264,6 +253,64 @@ exports.deleteComment = async (req, res) => {
         await Comment.findByIdAndDelete(commentId);
 
         res.status(200).json({ message: 'Bình luận và các trả lời đã được xóa thành công.' });
+
+    } catch (error) {
+        console.error("Lỗi xóa bình luận:", error);
+        const errorMessage = process.env.NODE_ENV === 'development' ? error.message : 'Lỗi server khi xóa bình luận.';
+        res.status(500).json({ message: errorMessage });
+    }
+};
+async function findComment(commentId, res) {
+    if (!mongoose.Types.ObjectId.isValid(commentId)) {
+        // Trả về null thay vì gửi response trực tiếp để hàm gọi có thể xử lý
+        // res.status(400).json({ message: 'ID bình luận không hợp lệ.' });
+        return null;
+    }
+    // Không populate commenter ở đây vì chỉ cần ID để so sánh
+    const comment = await Comment.findById(commentId);
+    return comment;
+}
+
+
+/**
+ * @description Xóa một bình luận hoặc trả lời
+ * @route DELETE /api/comments/:commentId
+ * @access Private (Chỉ chủ sở hữu comment)
+ */
+exports.deleteComment = async (req, res) => {
+    const { commentId } = req.params;
+    const userId = req.user?.id; 
+
+    // --- Kiểm tra đầu vào ---
+    if (!userId) {
+        return res.status(401).json({ message: 'Yêu cầu xác thực.' });
+    }
+    if (!mongoose.Types.ObjectId.isValid(commentId)) {
+         return res.status(400).json({ message: 'ID bình luận không hợp lệ.' });
+    }
+
+
+    try {
+        // Tìm comment cần xóa
+        const comment = await Comment.findById(commentId);
+
+        if (!comment) {
+            return res.status(404).json({ message: 'Không tìm thấy bình luận để xóa.' });
+        }
+
+        if (comment.commenter.toString() !== userId.toString()) {
+            return res.status(403).json({ message: 'Bạn không có quyền xóa bình luận này.' });
+        }
+
+
+        if (!comment.parentComment) {
+            console.log(`Deleting comment ${commentId} and its replies...`);
+            await Comment.deleteMany({ parentComment: comment._id }); // Xóa replies trước
+        } else {
+             console.log(`Deleting reply ${commentId}...`);
+        }
+        await Comment.findByIdAndDelete(commentId);
+        res.status(200).json({ message: 'Đã xóa bình luận thành công.', deletedCommentId: commentId });
 
     } catch (error) {
         console.error("Lỗi xóa bình luận:", error);

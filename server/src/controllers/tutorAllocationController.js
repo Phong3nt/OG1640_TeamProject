@@ -193,3 +193,39 @@ exports.deactivateAllocation = async (req, res) => {
     }
 };
 
+/**
+ * @description Lấy danh sách phân công CÁ NHÂN (student hoặc tutor) đang active
+ * @route GET /api/me/allocations (Ví dụ endpoint mới)
+ * @access Private (Student, Tutor)
+ */
+exports.getMyAllocations = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const userRole = req.user.role;
+
+        const filter = { status: 'active' }; 
+
+        if (userRole === 'student') {
+            filter.student = userId;
+        } else if (userRole === 'tutor') {
+            filter.tutor = userId;
+        } else {
+            console.log(`User role ${userRole} không phải student/tutor, không có 'my allocations'.`);
+            return res.status(200).json({ allocations: [] });
+        }
+
+        console.log(`getMyAllocations: Finding allocations with filter:`, filter); 
+        const allocations = await Allocation.find(filter)
+            .populate('student', 'fullName email avatar')   
+            .populate('tutor', 'fullName email avatar')    
+            .populate('allocatedBy', 'fullName email') 
+            .sort({ createdAt: -1 });            
+
+        res.status(200).json({ allocations });
+
+    } catch (error) {
+        console.error("Lỗi khi lấy 'my allocations':", error);
+        res.status(500).json({ message: 'Lỗi server khi lấy thông tin phân công của bạn.' });
+    }
+};
+

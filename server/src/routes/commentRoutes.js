@@ -6,10 +6,10 @@ const router = express.Router();
 
 router.use(requireSignIn);
 
-router.get('/blogs/:blogId/comments', commentController.getCommentsByBlog);
+// router.get('/blogs/:blogId/comments', commentController.getCommentsByBlog);
 router.get('/comments/:commentId/replies', commentController.getRepliesByComment);
 router.post('/blogs/:blogId/comments', commentController.createComment); 
-router.delete('/comments/:commentId', commentController.deleteComment); 
+router.delete('/:commentId', requireSignIn, commentController.deleteComment);
 router.post('/comments/:commentId/like', commentController.likeComment); 
 router.delete('/comments/:commentId/like', commentController.unlikeComment); 
 

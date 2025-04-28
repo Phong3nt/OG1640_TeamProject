@@ -74,16 +74,6 @@ export const Header = () => {
           <li>
             <Link to="/contact">Contact</Link>
           </li>
-          {user && user.role === 'staff' && (
-            <>
-              <li>
-                <Link to="/allocations">Allocation</Link>
-              </li>
-              <li>
-                <Link to="/dashboard/staff">Staff Dashboard</Link>
-              </li>
-            </>
-          )}
           <li className="dark-mode-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
             {isDarkMode ? <FaSun size={24} /> : <FaMoon size={24} />}
           </li>
@@ -92,7 +82,7 @@ export const Header = () => {
         <div className="auth-section">
           {user ? (
             <div className="user-info">
-              <span className="username">Hello, {user.name}</span>
+              <Link to='/profile'><span className="username">Hello, {user.name}</span></Link>
               <button className="logout" onClick={handleLogout}>
                 Logout
               </button>

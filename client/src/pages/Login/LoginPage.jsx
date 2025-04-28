@@ -61,7 +61,7 @@ login(user); // Lưu thông tin người dùng vào AuthContext
       } else if (role === "tutor") {
         navigate("/tutor");
       } else if (role === "staff") {
-        navigate("/allocations");
+        navigate("/dashboard/staff/analysis");
       } else {
         navigate("/login"); // fallback nếu role không xác định
       }

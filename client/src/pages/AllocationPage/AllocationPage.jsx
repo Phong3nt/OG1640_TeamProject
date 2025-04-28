@@ -65,10 +65,11 @@ export default function AllocationPage() {
         errorSetter(null);
         try {
             const response = await api.get(`/users/by-role?role=${role}&limit=1000`);
-            setter(response.data.users || []);
+            setter(response.data || []);
+            ;
         } catch (err) {
             console.error(`Failed to fetch ${role}s:`, err);
-            errorSetter(`Could not load ${role} list.`); // Thông báo lỗi tiếng Anh
+            errorSetter(`Could not load ${role} list.`);
         } finally {
             setUsersLoading(false);
         }
