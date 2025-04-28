@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios'; // Vẫn cần import axios nếu dùng trực tiếp hoặc để tạo instance
-import BlogCard from "../../../components/BlogCard/blogCard"; // Đường dẫn tới BlogCard
+import axios from 'axios'; 
+import BlogCard from "../../../components/BlogCard/blogCard"; 
 import { FaPlus } from "react-icons/fa";
-import CreateNewBlog from "../../../components/CreateNewBlog/createNewBlog"; // Đường dẫn tới CreateNewBlog
+import CreateNewBlog from "../../../components/CreateNewBlog/createNewBlog"; 
 import "./index.css";
 
-// --- Lấy biến môi trường ---
 const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api'; // Hoặc VITE_...
 
-// --- Cấu hình Axios Instance ---
 const api = axios.create({
   baseURL: apiBaseUrl,
 });
@@ -17,16 +15,15 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token && config.headers) {
-        config.headers.Authorization = token; // Hoặc `Bearer ${token}`
+        config.headers.Authorization = token; 
     }
     return config;
 }, (error) => {
     return Promise.reject(error);
 });
-// --- Hết cấu hình Axios ---
 
 
-export default function BlogList() { // Sử dụng export default như file trước
+export default function BlogList() { 
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -78,7 +75,7 @@ export default function BlogList() { // Sử dụng export default như file tr�
     };
 
     fetchBlogs();
-  }, []); // Fetch 1 lần khi mount
+  }, []); 
 
   const handleCreateNewBlog = () => {
     if (!currentUserInfo.id) {
@@ -100,13 +97,12 @@ export default function BlogList() { // Sử dụng export default như file tr�
     setShowCreateForm(false);
   };
 
-  if (isLoading) { /* ... loading ... */ }
-  if (error) { /* ... error ... */ }
+  if (isLoading) 
+  if (error) 
 
   return (
-    <div className="container blog-list-page"> {/* Thêm class cho trang */}
+    <div className="container blog-list-page"> 
       <div className="content blog-list-header" style={{ marginBottom: '20px', textAlign: 'right' }}>
-        {/* Chỉ hiển thị nút Create nếu đã đăng nhập */}
         {currentUserInfo.id && (
             <button className="create-blog-btn" onClick={handleCreateNewBlog}>
               <FaPlus style={{ marginRight: '5px' }} /> Create New Blog
@@ -114,13 +110,11 @@ export default function BlogList() { // Sử dụng export default như file tr�
         )}
       </div>
 
-      {/* === Phần hiển thị danh sách BlogCard === */}
       <div className="flex-container blog-cards-container">
         {blogs.length === 0 && !isLoading && (
-            <p>No blog posts found.</p> // Hiển thị khi không có bài viết
+            <p>No blog posts found.</p> 
         )}
         {blogs.map((blog) => (
-          // Link bao ngoài BlogCard
           <Link to={`/blog/${blog._id}`} key={blog._id} className="blog-card-link">
             <BlogCard blog={blog} />
           </Link>
