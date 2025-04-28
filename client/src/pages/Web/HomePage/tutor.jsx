@@ -1,11 +1,5 @@
-// import {
-//     StudentList,
-//     BlogList,
-//     FileList,
-//     ScheduleList
-// } from "./section";
+import { StudentList, PostList, FileList } from "../HomePage/sections";
 
-import { PostList } from "./sections/PostList";
 import "./homepage.css";
 
 export const TutorHomePage = () => {
@@ -13,12 +7,14 @@ export const TutorHomePage = () => {
 
   return (
     <main className="homepage">
-      <h2>Welcome, {user.name} ({user.role})</h2>
+      <h2>
+        Welcome, {user.name} ({user.role})
+      </h2>
 
-      {/* <section>
+      <section>
         <h2>List Students</h2>
-        {/* <StudentList /> */}
-      {/* </section> */} 
+        <StudentList />
+      </section>
 
       <section>
         <h2>List Posts</h2>
@@ -27,7 +23,7 @@ export const TutorHomePage = () => {
 
       <section>
         <h2>List File</h2>
-        {/* <FileList /> */}
+        <FileList />
       </section>
 
       <section>

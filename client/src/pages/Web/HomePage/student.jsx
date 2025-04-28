@@ -1,11 +1,4 @@
-// import {
-//   BlogList,
-//   // FileList,
-//   // ScheduleList
-// } from "./section";
-import MyAssignedTutor from "./sections/TutorList/TutorList"
-
-import { PostList } from "./sections/PostList";
+import { PostList, FileList } from "../HomePage/sections";
 import "./homepage.css";
 
 export const StudentHomePage = () => {
@@ -44,7 +37,7 @@ export const StudentHomePage = () => {
 
       <section>
         <h2>List File</h2>
-        {/* <FileList /> */}
+        <FileList />
       </section>
 
       <section>
